@@ -3,7 +3,7 @@
  * @author Group 10: Yufei, Chris, Neil, Sandeep
  */
 
-package isnork.g10;
+package isnork.g9;
 
 import java.awt.geom.Point2D;
 import java.util.Random;
