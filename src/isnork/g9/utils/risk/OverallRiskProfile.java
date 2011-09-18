@@ -1,11 +1,13 @@
 package isnork.g9.utils.risk;
 
 public class OverallRiskProfile {
-	double median, stdDev;
-	public OverallRiskProfile(double median, double stdDev) {
-		this.median = median;
-		this.stdDev = stdDev;
+	double expectation, goodGini, badGini;
+	public OverallRiskProfile(double expectation, double goodGini, double badGini) {
+		this.expectation = expectation;
+		this.goodGini = goodGini;
+		this.badGini = badGini;
 	}
-	public double getMedian() { return median; }
-	public double getStdDev() { return stdDev; }
+	public double getExpectation() { return expectation; }
+	public double getGoodGini() { return goodGini; }
+	public double getBadGini() { return badGini; }
 }
