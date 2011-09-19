@@ -31,6 +31,10 @@ public class Strategy {
 		
 		riskAvoidance = new RiskAvoidance();
 		riskAvoidance.setPlayer(p);
+		
+		global = new Global();
+		local = new LocalBenignSighting();
+		local.setPlayer(p);
 	}
 	
 	public void setRisk(IndividualRiskProfile r) {
@@ -73,8 +77,7 @@ public class Strategy {
 		} else if (player.getTimeElapsed() > 400) {
 			return returning.getDirection();
 		} else {
-			//get local strategy or message queue strategy, based on what's more important
-			return local.getDirection();
+			return player.getComm().getDirection(player.getLocation()).getDir();
 		}
 		
 	}

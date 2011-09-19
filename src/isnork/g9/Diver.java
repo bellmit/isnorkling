@@ -4,6 +4,8 @@ import java.awt.geom.Point2D;
 import java.util.HashSet;
 import java.util.Set;
 
+import isnork.g9.comm.CommPrototype;
+import isnork.g9.comm.SimpleCommunicator;
 import isnork.g9.strategy.Strategy;
 import isnork.g9.utils.BoardParams;
 import isnork.g9.utils.risk.IndividualRiskProfile;
@@ -23,6 +25,8 @@ public class Diver extends Player implements PlayerPrototype {
 	private Memory memory;
 	private int timeElapsed;
 	private Point2D location;
+	
+	private CommPrototype commPrototype;
 	
 	public Diver() {
 		strategy = new Strategy(this);
@@ -70,6 +74,9 @@ public class Diver extends Player implements PlayerPrototype {
 		//TODO use penalty and r for something
 		BoardParams params = new BoardParams(seaLifePossibilites, d, n);
 		
+		commPrototype = new SimpleCommunicator();
+		commPrototype.init(seaLifePossibilites, penalty, d, r, n);
+		
 		allDivers.add(this);
 		
 		if (allDivers.size() == n) {
@@ -84,6 +91,11 @@ public class Diver extends Player implements PlayerPrototype {
 	}
 
 	@Override
+	public CommPrototype getComm() {
+		return commPrototype;
+	}
+	
+	@Override
 	public String tick(Point2D myPosition, Set<Observation> whatYouSee,
 			Set<iSnorkMessage> incomingMessages,
 			Set<Observation> playerLocations) {
@@ -91,13 +103,9 @@ public class Diver extends Player implements PlayerPrototype {
 		sighting = whatYouSee;
 		location = myPosition;
 		
-		//TODO handle comm
+		strategy.setSighting(sighting);
 		
-		
-		
-		
-		
-		return null;
+		return commPrototype.createMessage(myPosition, whatYouSee, incomingMessages, playerLocations);
 	}
 
 	@Override

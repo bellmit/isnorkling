@@ -8,6 +8,5 @@ import isnork.sim.GameObject.Direction;
 
 public interface GlobalPrototype {
 	public void setBoardParams(BoardParams b);
-	public void setAllDivers(Set<PlayerPrototype> allDivers);
 	public Direction getDirection();
 }
