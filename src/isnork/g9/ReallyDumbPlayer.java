@@ -5,18 +5,21 @@
 
 package isnork.g9;
 
-import java.awt.geom.Point2D;
-import java.util.Random;
-import java.util.Set;
-
+import isnork.g9.comm.CommPrototype;
+import isnork.sim.GameObject.Direction;
 import isnork.sim.Observation;
 import isnork.sim.Player;
 import isnork.sim.SeaLifePrototype;
 import isnork.sim.iSnorkMessage;
-import isnork.sim.GameObject.Direction;
+
+import java.awt.geom.Point2D;
+import java.util.Iterator;
+import java.util.Set;
 
 public class ReallyDumbPlayer extends Player {
 
+	private CommPrototype commPrototype;
+	
 	private Direction[] choices = new Direction[] { Direction.N, Direction.NW, 
 			Direction.W, Direction.SW, Direction.S, 
             Direction.SE, Direction.E, Direction.NE, 
@@ -40,7 +43,11 @@ public class ReallyDumbPlayer extends Player {
 			Set<iSnorkMessage> incomingMessages,
 			Set<Observation> playerLocations) {
 		// TODO Auto-generated method stub
-		return null;
+		
+		// Assume that we have some idea of the kind and distribution of sea creatures
+		// Hence, we shall communicate approximately how much happiness & in what direction
+		return commPrototype.createMessage(myPosition, whatYouSee, incomingMessages, playerLocations);
+		
 	}
 
 	/**
