@@ -313,6 +313,7 @@ public Player getCurPlayer() {
 			}
 			catch(Exception e)
 			{
+				e.printStackTrace();
 				exceptioned = true;
 				round = 481;
 				return true;

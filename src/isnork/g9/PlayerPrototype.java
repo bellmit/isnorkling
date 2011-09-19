@@ -1,6 +1,7 @@
 package isnork.g9;
 
 import java.awt.geom.Point2D;
+import java.util.Random;
 import java.util.Set;
 
 import isnork.g9.comm.CommPrototype;
@@ -17,4 +18,5 @@ public interface PlayerPrototype {
 	public Point2D getLocation();
 	public int getId();
 	public CommPrototype getComm();
+	public Random getRandom();
 }

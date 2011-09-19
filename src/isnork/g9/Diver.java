@@ -2,6 +2,7 @@ package isnork.g9;
 
 import java.awt.geom.Point2D;
 import java.util.HashSet;
+import java.util.Random;
 import java.util.Set;
 
 import isnork.g9.comm.CommPrototype;
@@ -66,6 +67,10 @@ public class Diver extends Player implements PlayerPrototype {
 	@Override
 	public int getTimeElapsed() {
 		return timeElapsed;
+	}
+	
+	public Random getRandom() {
+		return this.random;
 	}
 	
 	@Override

@@ -22,15 +22,24 @@ public class LocalBenignSighting implements LocalBenignSightingPrototype {
 		HashSet<ObservationWrapper> nextSighting = new HashSet<ObservationWrapper>();
 		
 		for (Observation ob : sighting) {
+			
+			if (ob.getName().equals("Diver by G9")) {
+				continue;
+			}
+			
 			ObservationWrapper o = new ObservationWrapper();
 			o.happiness = ob.happiness();
 			o.direction = ob.getDirection();
 			o.id = ob.getId();
-			o.location = ob.getLocation();
+			
+			double dx = (o.direction == null ? 0 : o.direction.dx);
+			double dy = (o.direction == null ? 0 : o.direction.dy);
+			
+			double x = ob.getLocation().getX();
+			double y = ob.getLocation().getY();
 			
 			
-			o.location.setLocation(o.location.getX() + o.direction.dx, o.location.getY() + o.direction.dy);
-			
+			o.location = new Point2D.Double(x + dx, y + dy);
 			nextSighting.add(o);
 		}
 	}

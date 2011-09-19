@@ -11,7 +11,7 @@ public class SimpleCommunicator implements CommPrototype {
 	
 	protected RecentlyCommunicatedSightings recentSightings = new RecentlyCommunicatedSightings();
 	protected Encoding encoding;
-	protected IncomingMessageQueue queuedMessages;
+	protected IncomingMessageQueue queuedMessages = new IncomingMessageQueue();
 
 	@Override
 	public String createMessage(Point2D myPosition,

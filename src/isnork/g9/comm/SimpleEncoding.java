@@ -58,7 +58,9 @@ public class SimpleEncoding implements Encoding {
 		maxVal = maxd > maxs ? maxd : maxs;
 		
 		scalingFactorD = maxd / (1 << NUM_HAPPINESS_VALUE_BITS_D);
+		if (scalingFactorD==0) { scalingFactorD = 1; }
 		scalingFactorS = maxd / (1 << NUM_HAPPINESS_VALUE_BITS_S);
+		if (scalingFactorS==0) { scalingFactorS = 1; }
 		
 	}
 	
@@ -96,6 +98,8 @@ public class SimpleEncoding implements Encoding {
 		}else{
 			
 			//Dynamic sea creature
+			
+			
 			
 			//code the value
 			return new String(new char[]{(char)('a' + (obs.happiness()/scalingFactorD))});

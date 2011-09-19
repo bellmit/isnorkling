@@ -32,7 +32,7 @@ public class Strategy {
 		riskAvoidance = new RiskAvoidance();
 		riskAvoidance.setPlayer(p);
 		
-		global = new Global();
+		global = new GlobalPrototypeStrategy();
 		local = new LocalBenignSighting();
 		local.setPlayer(p);
 	}
