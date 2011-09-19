@@ -31,6 +31,7 @@ public class RiskDistributor implements RiskDistributorPrototype {
 		if (risk < 0) {
 			risk = 0;
 		}
+		risk = 1 - risk;
 			
 		// v0: XXX there is no differentiation between divers - only the common risk factor used.
 		for (PlayerPrototype diver : divers) {		
