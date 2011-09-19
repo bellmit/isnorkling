@@ -84,7 +84,7 @@ public class Diver extends Player implements PlayerPrototype {
 			RiskEvaluator re = new RiskEvaluator();
 			re.setBoardParams(params);
 			rd.setBoardParams(params);
-			//rd.setOverallRiskProfile(re.getOverallRiskProfile());
+			rd.setOverallRiskProfile(re.getOverallRiskProfile());
 			//rd.distribute((Set<PlayerPrototype>) allDivers);
 		}
 	}
