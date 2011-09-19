@@ -334,6 +334,7 @@ public Player getCurPlayer() {
 				}
 				catch(Exception e)
 				{
+					e.printStackTrace();
 					System.err.println("Timeout/exception");
 					exceptioned = true;
 					round = 481;

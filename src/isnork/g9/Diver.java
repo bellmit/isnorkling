@@ -109,8 +109,8 @@ public class Diver extends Player implements PlayerPrototype {
 		location = myPosition;
 		
 		strategy.setSighting(sighting);
-		
-		return commPrototype.createMessage(myPosition, whatYouSee, incomingMessages, playerLocations);
+		return null;
+		//return commPrototype.createMessage(myPosition, whatYouSee, incomingMessages, playerLocations);
 	}
 
 	@Override

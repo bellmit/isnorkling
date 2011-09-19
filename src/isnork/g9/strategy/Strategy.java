@@ -33,8 +33,12 @@ public class Strategy {
 		riskAvoidance.setPlayer(p);
 		
 		global = new GlobalPrototypeStrategy();
+		global.setPlayer(p);
 		local = new LocalBenignSighting();
 		local.setPlayer(p);
+		
+		returning = new Return();
+		returning.setPlayer(p);
 	}
 	
 	public void setRisk(IndividualRiskProfile r) {
@@ -70,6 +74,8 @@ public class Strategy {
 			return riskAvoidance.getDirection();
 		}
 		
+		global.setLocation(player.getLocation());
+		
 		//In the beginning, try to spread out
 		if (player.getTimeElapsed() < 60) {
 			return global.getDirection();
@@ -77,7 +83,8 @@ public class Strategy {
 		} else if (player.getTimeElapsed() > 400) {
 			return returning.getDirection();
 		} else {
-			return player.getComm().getDirection(player.getLocation()).getDir();
+			return global.getDirection();
+			//return player.getComm().getDirection(player.getLocation()).getDir();
 		}
 		
 	}
