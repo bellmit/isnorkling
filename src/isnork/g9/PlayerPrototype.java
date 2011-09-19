@@ -10,6 +10,7 @@ import isnork.sim.Observation;
 public interface PlayerPrototype {
 	public void setIndividualRiskProfile(IndividualRiskProfile r);
 	public void setStrategy(Strategy s);
+	public int getTimeElapsed();
 	public Set<Observation> getCurrentSighting();
 	public Memory getMemory();
 	public Point2D getLocation();

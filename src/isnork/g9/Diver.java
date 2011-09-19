@@ -1,7 +1,7 @@
 package isnork.g9;
 
 import java.awt.geom.Point2D;
-import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Set;
 
 import isnork.g9.strategy.Strategy;
@@ -20,7 +20,7 @@ public class Diver extends Player implements PlayerPrototype {
 	
 	private static int idCounter = 0;
 	
-	private static ArrayList<PlayerPrototype> allDivers = new ArrayList<PlayerPrototype>();
+	private static HashSet<PlayerPrototype> allDivers = new HashSet<PlayerPrototype>();
 	
 	private int id;
 	
@@ -64,8 +64,12 @@ public class Diver extends Player implements PlayerPrototype {
 	public String getName() {
 		return "Diver by G9";
 	}
+	
+	@Override
+	public int getTimeElapsed() {
+		return timeElapsed;
+	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public void newGame(Set<SeaLifePrototype> seaLifePossibilites, int penalty,
 			int d, int r, int n) {
@@ -85,6 +89,7 @@ public class Diver extends Player implements PlayerPrototype {
 			re.setBoardParams(params);
 			rd.setBoardParams(params);
 			rd.setOverallRiskProfile(re.getOverallRiskProfile());
+			
 			rd.distribute((Set<PlayerPrototype>) allDivers);
 		}
 	}
