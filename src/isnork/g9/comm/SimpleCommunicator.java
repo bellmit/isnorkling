@@ -1,13 +1,10 @@
 package isnork.g9.comm;
 
-import isnork.sim.GameObject.Direction;
 import isnork.sim.Observation;
 import isnork.sim.SeaLifePrototype;
 import isnork.sim.iSnorkMessage;
 
 import java.awt.geom.Point2D;
-import java.util.Map;
-import java.util.PriorityQueue;
 import java.util.Set;
 
 public class SimpleCommunicator implements CommPrototype {
@@ -40,13 +37,13 @@ public class SimpleCommunicator implements CommPrototype {
 	private void processIncoming(Point2D myPosition,
 			Set<Observation> whatYouSee, Set<iSnorkMessage> incomingMessages,
 			Set<Observation> playerLocations) {
-		queuedMessages.load(myPosition, whatYouSee,  incomingMessages, playerLocations);
+		queuedMessages.load(myPosition, whatYouSee,  incomingMessages, playerLocations,encoding);
 		
 	}
 
 	@Override
-	public Direction getDirection() {
-		return queuedMessages.getHVTDirection();
+	public Suggestion getDirection(Point2D myPosition) {
+		return queuedMessages.tick().getHVTDirection(myPosition);
 	}
 	
 	

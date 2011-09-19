@@ -34,6 +34,11 @@ public class SimpleEncoding implements Encoding {
 	private static final int NUM_HAPPINESS_VALUE_BITS_D = 4;
 	private static final int NUM_HAPPINESS_VALUE_BITS_S = 1;
 	
+	private static int maxVal;
+	
+	
+	public static int getMaxVal(){return maxVal;}
+	
 	@Override
 	public void init(Set<SeaLifePrototype> seaLifePossibilites, int penalty,
 			int d, int r, int n){
@@ -49,6 +54,8 @@ public class SimpleEncoding implements Encoding {
 				maxd = seaLifePrototype.getHappiness();
 
 		}
+		
+		maxVal = maxd > maxs ? maxd : maxs;
 		
 		scalingFactorD = maxd / (1 << NUM_HAPPINESS_VALUE_BITS_D);
 		scalingFactorS = maxd / (1 << NUM_HAPPINESS_VALUE_BITS_S);
@@ -98,7 +105,21 @@ public class SimpleEncoding implements Encoding {
 
 	@Override
 	public Message decode(String str) {
-		// TODO Auto-generated method stub
-		return null;
+		
+		SimpleMessage msg = new SimpleMessage();
+		int rawMsg = (int)str.charAt(0);
+		msg.setRawMsg(str);
+		
+		boolean isDynamic = (rawMsg & (1<<4)) == 0;
+		msg.setDynamic(isDynamic);
+		
+		if(isDynamic){
+			msg.setEstValue(rawMsg*scalingFactorD);
+		}
+		else{
+			msg.setEstValue((rawMsg & 1)*scalingFactorS);
+		}
+		
+		return msg;
 	}
 }
