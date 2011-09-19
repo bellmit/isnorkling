@@ -14,4 +14,5 @@ public interface PlayerPrototype {
 	public Set<Observation> getCurrentSighting();
 	public Memory getMemory();
 	public Point2D getLocation();
+	public int getId();
 }

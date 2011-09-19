@@ -16,13 +16,7 @@ import isnork.sim.iSnorkMessage;
 import isnork.sim.GameObject.Direction;
 
 public class Diver extends Player implements PlayerPrototype {
-
-	
-	private static int idCounter = 0;
-	
 	private static HashSet<PlayerPrototype> allDivers = new HashSet<PlayerPrototype>();
-	
-	private int id;
 	
 	private Strategy strategy;
 	private Set<Observation> sighting;
@@ -69,7 +63,7 @@ public class Diver extends Player implements PlayerPrototype {
 	public int getTimeElapsed() {
 		return timeElapsed;
 	}
-
+	
 	@Override
 	public void newGame(Set<SeaLifePrototype> seaLifePossibilites, int penalty,
 			int d, int r, int n) {
@@ -77,11 +71,6 @@ public class Diver extends Player implements PlayerPrototype {
 		BoardParams params = new BoardParams(seaLifePossibilites, d, n);
 		
 		allDivers.add(this);
-		
-		//Id is negative to match the scheme used by GameEngine
-		id = -idCounter;
-		idCounter++;
-		
 		
 		if (allDivers.size() == n) {
 			RiskDistributor rd = new RiskDistributor();
