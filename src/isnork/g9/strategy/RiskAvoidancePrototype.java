@@ -8,7 +8,8 @@ import java.util.Set;
 
 public interface RiskAvoidancePrototype {
 	public void setPlayer(PlayerPrototype p);
-	public Set<Observation> getDangerousSighting();
+	public void setOverallStrategy(Strategy s);
+	public void setDangerousSighting(Set<Observation> s);
 	public Direction getDirection();
 	public double getConfidence();
 }

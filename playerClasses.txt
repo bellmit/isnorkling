@@ -1,2 +1,2 @@
 isnork.g0.DumbPlayer0
-isnork.g10.ReallyDumbPlayer
+isnork.g9.Diver
