@@ -6,6 +6,7 @@
 package isnork.g9;
 
 import isnork.g9.comm.CommPrototype;
+import isnork.g9.comm.SimpleCommunicator;
 import isnork.sim.GameObject.Direction;
 import isnork.sim.Observation;
 import isnork.sim.Player;
@@ -34,7 +35,7 @@ public class ReallyDumbPlayer extends Player {
 	public void newGame(Set<SeaLifePrototype> seaLifePossibilites, int penalty,
 			int d, int r, int n) {
 		// TODO Auto-generated method stub
-		
+		commPrototype = new SimpleCommunicator();
 		commPrototype.init(seaLifePossibilites, penalty, d, r, n);
 
 	}
@@ -47,6 +48,8 @@ public class ReallyDumbPlayer extends Player {
 		
 		// We have some idea of the kind and distribution of sea creatures
 		// Hence, we shall communicate approximately how much happiness & in what direction
+		System.out.println("Hello World");
+		System.out.println(commPrototype.createMessage(myPosition, whatYouSee, incomingMessages, playerLocations));
 		return commPrototype.createMessage(myPosition, whatYouSee, incomingMessages, playerLocations);
 		
 	}
