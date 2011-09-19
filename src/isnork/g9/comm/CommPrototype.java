@@ -1,15 +1,11 @@
 package isnork.g9.comm;
 
-import java.awt.geom.Point2D;
-import java.util.PriorityQueue;
-import java.util.Set;
-
-import isnork.g9.PlayerPrototype;
-import isnork.sim.GameObject;
-import isnork.sim.GameObject.Direction;
 import isnork.sim.Observation;
 import isnork.sim.SeaLifePrototype;
 import isnork.sim.iSnorkMessage;
+
+import java.awt.geom.Point2D;
+import java.util.Set;
 
 public interface CommPrototype {
 	
@@ -20,5 +16,5 @@ public interface CommPrototype {
 			Set<iSnorkMessage> incomingMessages,
 			Set<Observation> playerLocations);
 	
-	public GameObject.Direction getDirection();
+	public Suggestion getDirection(Point2D myPosition);
 }

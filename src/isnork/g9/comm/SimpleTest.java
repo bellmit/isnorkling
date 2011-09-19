@@ -16,6 +16,8 @@ public class SimpleTest {
 		*/
 		System.out.println("See below:"+(char)('a' + (1000/500)));
 		System.out.println(new String(new char[]{'j'}));
+		
+		System.out.println("Char as int: "+((int)'a'));
 
 	}
 
