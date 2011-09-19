@@ -102,7 +102,6 @@ public class Diver extends Player implements PlayerPrototype {
 
 	@Override
 	public Direction getMove() {
-		//TODO integration...
 		return strategy.getDirection();
 	}
 

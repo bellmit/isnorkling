@@ -1,5 +1,6 @@
 package isnork.g9.strategy;
 
+import isnork.g9.PlayerPrototype;
 import isnork.sim.GameObject.Direction;
 import isnork.sim.Observation;
 
@@ -11,4 +12,5 @@ public interface LocalBenignSightingPrototype {
 	public Direction getDirection();
 	//How confident is the direction? range of 0 to 1
 	public double getConfidence();
+	public void setPlayer(PlayerPrototype p);
 }

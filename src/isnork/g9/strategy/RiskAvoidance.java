@@ -6,6 +6,7 @@ import isnork.sim.Observation;
 import isnork.sim.GameObject.Direction;
 
 import java.awt.geom.Point2D;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -17,10 +18,7 @@ public class RiskAvoidance implements RiskAvoidancePrototype {
 	private Strategy strategy;
 	private IndividualRiskProfile risk;
 	
-	private Direction[] dirs = new Direction[] { Direction.N, Direction.NW, 
-			Direction.W, Direction.SW, Direction.S, 
-            Direction.SE, Direction.E, Direction.NE, 
-            Direction.STAYPUT };
+	private ArrayList<Direction> dirs = Direction.allBut(null);
 	
 	@Override
 	public void setPlayer(PlayerPrototype p) {
@@ -116,12 +114,4 @@ public class RiskAvoidance implements RiskAvoidancePrototype {
 	public double getConfidence() {
 		return confidence;
 	}
-	
-	private class ObservationWrapper {
-		public int happiness;
-		public Direction direction;
-		public Point2D location;
-		public int id;
-	}
-
 }
