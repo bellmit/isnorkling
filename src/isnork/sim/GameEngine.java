@@ -7,18 +7,12 @@
 package isnork.sim;
 
 import isnork.sim.GameListener.GameUpdateType;
-
 import isnork.sim.GameObject.Direction;
 import isnork.sim.ui.GUI;
 import isnork.sim.ui.Text;
 
-import java.awt.Point;
-import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
 import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.lang.reflect.Array;
 import java.net.UnknownHostException;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -26,7 +20,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.ConcurrentModificationException;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;

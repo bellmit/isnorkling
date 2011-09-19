@@ -13,7 +13,6 @@ import isnork.sim.SeaLifePrototype;
 import isnork.sim.iSnorkMessage;
 
 import java.awt.geom.Point2D;
-import java.util.Iterator;
 import java.util.Set;
 
 public class ReallyDumbPlayer extends Player {
@@ -35,6 +34,8 @@ public class ReallyDumbPlayer extends Player {
 	public void newGame(Set<SeaLifePrototype> seaLifePossibilites, int penalty,
 			int d, int r, int n) {
 		// TODO Auto-generated method stub
+		
+		commPrototype.init(seaLifePossibilites, penalty, d, r, n);
 
 	}
 
@@ -44,7 +45,7 @@ public class ReallyDumbPlayer extends Player {
 			Set<Observation> playerLocations) {
 		// TODO Auto-generated method stub
 		
-		// Assume that we have some idea of the kind and distribution of sea creatures
+		// We have some idea of the kind and distribution of sea creatures
 		// Hence, we shall communicate approximately how much happiness & in what direction
 		return commPrototype.createMessage(myPosition, whatYouSee, incomingMessages, playerLocations);
 		
