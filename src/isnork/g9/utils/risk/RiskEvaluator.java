@@ -75,6 +75,7 @@ public class RiskEvaluator implements RiskEvaluatorPrototype {
 	// were to collide with all the creatures.
 	private void calcGrossExpec(){
 		int expec = 0;
+		slps = b.getArrayListOfSeaLifePrototypes();
 		for (SeaLifePrototype slp : slps) {
 			int meanCount = (slp.getMaxCount() - slp.getMinCount()) / 2;
 			int creatureExpec = meanCount * slp.getHappiness();
