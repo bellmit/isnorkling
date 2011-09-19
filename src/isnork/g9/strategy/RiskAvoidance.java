@@ -73,7 +73,11 @@ public class RiskAvoidance implements RiskAvoidancePrototype {
 			}
 		}
 		
-		//TODO find confidence
+		//TODO this is really primitive, not taking into consideration of board params, etc.
+		confidence = 0.5 * Math.min(sighting.size() / 10, 1) + 0.5 * Math.min(minDanger / 200, 1);
+		
+		//Adjust by risk profile
+		confidence *= Math.sqrt(risk.getRiskAvoidance());
 		
 		return curDir;
 	}
@@ -110,8 +114,7 @@ public class RiskAvoidance implements RiskAvoidancePrototype {
 
 	@Override
 	public double getConfidence() {
-		// TODO Auto-generated method stub
-		return 0;
+		return confidence;
 	}
 	
 	private class ObservationWrapper {
