@@ -1,13 +1,12 @@
 package isnork.g9.strategy;
 
-import java.awt.geom.Point2D;
-import java.util.HashSet;
-import java.util.Set;
-
 import isnork.g9.PlayerPrototype;
 import isnork.g9.utils.risk.IndividualRiskProfile;
 import isnork.sim.GameObject.Direction;
 import isnork.sim.Observation;
+
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * this is the overall strategy
@@ -83,8 +82,8 @@ public class Strategy {
 		} else if (player.getTimeElapsed() > 400) {
 			return returning.getDirection();
 		} else {
-			return global.getDirection();
-			//return player.getComm().getDirection(player.getLocation()).getDir();
+			//return global.getDirection();
+			return player.getComm().getDirection(player.getLocation()).getDir();
 		}
 		
 	}

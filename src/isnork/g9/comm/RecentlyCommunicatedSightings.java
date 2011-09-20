@@ -3,21 +3,29 @@ package isnork.g9.comm;
 
 import isnork.sim.Observation;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 public class RecentlyCommunicatedSightings {
+	
 	private Map<Integer, CommunicatedSighting> recentlyCommunicatedSightings = new HashMap<Integer, CommunicatedSighting>();
 	
 	public RecentlyCommunicatedSightings tick(){
-		Iterator<CommunicatedSighting> iter = recentlyCommunicatedSightings.values().iterator();
-		while(iter.hasNext()){
-			CommunicatedSighting sighting = iter.next();
+		
+		List<CommunicatedSighting> deadSightings = new ArrayList<CommunicatedSighting>();
+		for(CommunicatedSighting sighting : recentlyCommunicatedSightings.values()){
 			sighting.age();
-			if(sighting.die())recentlyCommunicatedSightings.remove(sighting.getObs().getId());
+			if(sighting.die()) deadSightings.add(sighting);
 		}
+		
+		for(CommunicatedSighting deadSighting : deadSightings){
+			recentlyCommunicatedSightings.remove(deadSighting.getObs().getId());
+		}
+		
 		return this;
 	}
 	

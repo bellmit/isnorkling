@@ -1,12 +1,14 @@
 package isnork.g9.comm;
 
 import isnork.sim.GameObject;
+import isnork.sim.GameObject.Direction;
 import isnork.sim.Observation;
 import isnork.sim.iSnorkMessage;
-import isnork.sim.GameObject.Direction;
 
 import java.awt.geom.Point2D;
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.util.PriorityQueue;
 import java.util.Set;
 
@@ -34,18 +36,16 @@ public class IncomingMessageQueue {
 		
 		int choice = (int) thetaDeg/45;
 		
+		// TODO: remove hard coded 500 and put sensible call
 		return new Suggestion(choices[choice],
-				((double)msg.getEstValue())/SimpleEncoding.getMaxVal());
+				((double)msg.getEstValue())/500);
 		
 	}
 	
 	public void load(Point2D myPosition, Set<Observation> whatYouSee, Set<iSnorkMessage> incomingMessages,
 			Set<Observation> playerLocations, Encoding encoding){
 		
-		Iterator<iSnorkMessage> iter = incomingMessages.iterator();
-		
-		while(iter.hasNext()){
-			iSnorkMessage iMsg = iter.next();
+		for(iSnorkMessage iMsg : incomingMessages){
 			SimpleMessage sMsg = (SimpleMessage) encoding.decode(iMsg.getMsg());
 			sMsg.setDiverCoord(iMsg.getLocation());
 			msgHeap.add(sMsg);
@@ -56,13 +56,16 @@ public class IncomingMessageQueue {
 	
 	public IncomingMessageQueue tick(){
 		
-		Iterator<SimpleMessage> iter = msgHeap.iterator();
-		while(iter.hasNext()){
-			SimpleMessage msg = iter.next();
+		List<SimpleMessage> deadMessages = new ArrayList<SimpleMessage>();
+		
+		for(SimpleMessage msg : msgHeap){
 			msg.age();
-			if(msg.die())msgHeap.remove(msg);
+			if(msg.die())deadMessages.add(msg);
 		}
 		
+		for(SimpleMessage msg : deadMessages)
+			msgHeap.remove(msg);
+				
 		return this;
 	}
 

@@ -52,8 +52,7 @@ public class SimpleCommunicator implements CommPrototype {
 	public void init(Set<SeaLifePrototype> seaLifePossibilites, int penalty,
 			int d, int r, int n) {
 		
-		encoding = new SimpleEncoding();
-		encoding.init(seaLifePossibilites, penalty, d, r, n);
+		encoding = new SimpleEncoding(seaLifePossibilites, penalty, d, r, n);
 		
 	}
 	

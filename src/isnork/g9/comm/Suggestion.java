@@ -7,6 +7,7 @@ public class Suggestion {
 	
 	private GameObject.Direction dir;
 	private double confidence;
+	
 	public Suggestion(Direction dir, double confidence) {
 		super();
 		this.dir = dir;

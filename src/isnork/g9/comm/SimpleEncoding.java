@@ -29,18 +29,18 @@ import java.util.Set;
 
 public class SimpleEncoding implements Encoding {
 	
-	private static int scalingFactorD;
-	private static int scalingFactorS;
+	private final int scalingFactorD; 
+	private final int scalingFactorS; 
 	private static final int NUM_HAPPINESS_VALUE_BITS_D = 4;
 	private static final int NUM_HAPPINESS_VALUE_BITS_S = 1;
 	
-	private static int maxVal;
+	private final int maxVal; 
 	
 	
-	public static int getMaxVal(){return maxVal;}
+	public int getMaxVal(){return maxVal;}
 	
-	@Override
-	public void init(Set<SeaLifePrototype> seaLifePossibilites, int penalty,
+	
+	public SimpleEncoding(Set<SeaLifePrototype> seaLifePossibilites, int penalty,
 			int d, int r, int n){
 		
 		int maxd = -1;
@@ -55,12 +55,13 @@ public class SimpleEncoding implements Encoding {
 
 		}
 		
+		int _scalingFactorD = maxd / (1 << NUM_HAPPINESS_VALUE_BITS_D);
+		int _scalingFactorS = maxs / (1 << NUM_HAPPINESS_VALUE_BITS_S);
+		scalingFactorD = _scalingFactorD == 0 ? 1 : _scalingFactorD;
+		scalingFactorS = _scalingFactorS == 0 ? 1 : _scalingFactorS;
+		
 		maxVal = maxd > maxs ? maxd : maxs;
 		
-		scalingFactorD = maxd / (1 << NUM_HAPPINESS_VALUE_BITS_D);
-		if (scalingFactorD==0) { scalingFactorD = 1; }
-		scalingFactorS = maxd / (1 << NUM_HAPPINESS_VALUE_BITS_S);
-		if (scalingFactorS==0) { scalingFactorS = 1; }
 		
 	}
 	

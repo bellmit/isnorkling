@@ -10,11 +10,12 @@ public class SimpleMessage implements Message,Comparator<SimpleMessage>, Compara
 	private int estValue;
 	private boolean dynamic;
 	private int age=0;
-	private static int TTL = 12;
 	
 	
+	@Override
 	public void age(){age++;}
 	
+	@Override
 	public boolean die(){
 		if(dynamic) return age > TTL;
 		return false;
