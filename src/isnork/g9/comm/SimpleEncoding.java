@@ -1,5 +1,6 @@
 package isnork.g9.comm;
 
+import isnork.g9.utils.GameParams;
 import isnork.sim.GameObject;
 import isnork.sim.Observation;
 import isnork.sim.SeaLifePrototype;
@@ -33,36 +34,13 @@ public class SimpleEncoding implements Encoding {
 	private final int scalingFactorS; 
 	private static final int NUM_HAPPINESS_VALUE_BITS_D = 4;
 	private static final int NUM_HAPPINESS_VALUE_BITS_S = 1;
+	private static final int NEG_INFINITY = -9999;
 	
-	private final int maxVal; 
-	
-	
-	public int getMaxVal(){return maxVal;}
-	
-	
-	public SimpleEncoding(Set<SeaLifePrototype> seaLifePossibilites, int penalty,
-			int d, int r, int n){
-		
-		int maxd = -1;
-		int maxs = -1;
-		Iterator<SeaLifePrototype> iter = seaLifePossibilites.iterator();
-		while(iter.hasNext()){
-			SeaLifePrototype seaLifePrototype = iter.next();
-			if(seaLifePrototype.getSpeed()==0 && seaLifePrototype.getHappiness() > maxs)
-				maxs = seaLifePrototype.getHappiness();
-			if(seaLifePrototype.getHappiness() > maxd)
-				maxd = seaLifePrototype.getHappiness();
-
-		}
-		
-		int _scalingFactorD = maxd / (1 << NUM_HAPPINESS_VALUE_BITS_D);
-		int _scalingFactorS = maxs / (1 << NUM_HAPPINESS_VALUE_BITS_S);
+	public SimpleEncoding(){
+		int _scalingFactorD = GameParams.getDynamicHVT() / (1 << NUM_HAPPINESS_VALUE_BITS_D);
+		int _scalingFactorS = GameParams.getStaticHVT() / (1 << NUM_HAPPINESS_VALUE_BITS_S);
 		scalingFactorD = _scalingFactorD == 0 ? 1 : _scalingFactorD;
 		scalingFactorS = _scalingFactorS == 0 ? 1 : _scalingFactorS;
-		
-		maxVal = maxd > maxs ? maxd : maxs;
-		
-		
 	}
 	
 	@Override
@@ -112,6 +90,14 @@ public class SimpleEncoding implements Encoding {
 	public Message decode(String str) {
 		
 		SimpleMessage msg = new SimpleMessage();
+		
+		if(str==null){
+			System.out.println("COMM ERROR: Received null incoming message");
+			msg.setEstValue(NEG_INFINITY);
+			return msg;
+		}
+		
+		
 		int rawMsg = (int)str.charAt(0);
 		msg.setRawMsg(str);
 		

@@ -9,9 +9,6 @@ import java.util.Set;
 
 public interface CommPrototype {
 	
-	public void init(Set<SeaLifePrototype> seaLifePossibilites, int penalty,
-			int d, int r, int n);
-	
 	public String createMessage(Point2D myPosition, Set<Observation> whatYouSee,
 			Set<iSnorkMessage> incomingMessages,
 			Set<Observation> playerLocations);

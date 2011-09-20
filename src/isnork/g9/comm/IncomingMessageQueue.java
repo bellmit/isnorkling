@@ -1,5 +1,6 @@
 package isnork.g9.comm;
 
+import isnork.g9.utils.GameParams;
 import isnork.sim.GameObject;
 import isnork.sim.GameObject.Direction;
 import isnork.sim.Observation;
@@ -15,10 +16,9 @@ import java.util.Set;
 public class IncomingMessageQueue {
 	
 	private PriorityQueue<SimpleMessage> msgHeap = new PriorityQueue<SimpleMessage>();
-	private Direction[] choices = new Direction[] { Direction.N, Direction.NW, 
-			Direction.W, Direction.SW, Direction.S, 
-            Direction.SE, Direction.E, Direction.NE, 
-            Direction.STAYPUT }; 
+	private static final Direction[] choices = new Direction[] {Direction.E, Direction.NE,
+		Direction.N, Direction.NW, Direction.W, Direction.SW, Direction.S, Direction.SE,
+		Direction.STAYPUT}; 
 	
 	
 	public Suggestion getHVTDirection(Point2D myPosition){
@@ -33,12 +33,10 @@ public class IncomingMessageQueue {
 		double thetaRad = Math.atan2(dest.getY()-myPosition.getY(), dest.getX()-myPosition.getX());
 		double thetaDeg = thetaRad * Math.PI / 180;
 		if(thetaDeg < 0 ) thetaDeg += 360;
+		int dirChoice = ((int)thetaDeg)/45 + ( ((int) thetaDeg)%45 < 23 ? 0 : 1);
 		
-		int choice = (int) thetaDeg/45;
-		
-		// TODO: remove hard coded 500 and put sensible call
-		return new Suggestion(choices[choice],
-				((double)msg.getEstValue())/500);
+		return new Suggestion(choices[dirChoice],
+				((double)msg.getEstValue())/GameParams.getOverallHVT());
 		
 	}
 	
