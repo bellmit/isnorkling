@@ -174,7 +174,7 @@ public class Diver extends Player implements PlayerPrototype {
 		return lastDirection;
 	}
 
-	public void setLastDirection(int lastDirection) {
+	public void setLastDirection(Direction lastDirection) {
 		this.lastDirection = lastDirection;
 	}
 }
