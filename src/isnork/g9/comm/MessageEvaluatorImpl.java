@@ -24,18 +24,23 @@ public class MessageEvaluatorImpl<T extends Message> implements MessageEvaluator
 		}else{
 			coeff = r / senderDistance;
 		}
+		//System.out.println("Distance coeff: "+coeff);
 		return coeff;
 	}
 	
 	private double normalizeByHVT(T msg){
+		double coeff;
 		if(msg instanceof SimpleMessage){
 			if(((SimpleMessage)msg).isDynamic()){
-				return msg.getEstimatedValue() / GameParams.getDynamicHVT();
+				coeff = msg.getEstimatedValue() / GameParams.getDynamicHVT();
 			}else{
-				return msg.getEstimatedValue() / GameParams.getStaticHVT();
+				coeff = msg.getEstimatedValue() / GameParams.getStaticHVT();
 			}
+		}else{
+			coeff = msg.getEstimatedValue()/GameParams.getOverallHVT();
 		}
-		return msg.getEstimatedValue()/GameParams.getOverallHVT();
+		//System.out.println("HVT coeff: "+coeff);
+		return coeff;
 	}
 
 }

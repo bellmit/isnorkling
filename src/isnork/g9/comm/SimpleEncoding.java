@@ -53,7 +53,7 @@ public class SimpleEncoding implements Encoding {
 		}
 		
 		//Static or Dynamic
-		if(obs.getDirection() == GameObject.Direction.STAYPUT){
+		if(obs.getDirection() == null){
 			
 			//Static sea creature
 			msg = msg | (1 << 4);

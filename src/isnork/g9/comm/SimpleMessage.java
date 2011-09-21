@@ -40,15 +40,15 @@ public class SimpleMessage implements Message,Comparator<SimpleMessage>, Compara
 
 	@Override
 	public int compare(SimpleMessage msg1, SimpleMessage msg2) {
-		if(msg1.estimatedValue < msg2.estimatedValue) return -1;
-		if(msg1.estimatedValue > msg2.estimatedValue) return 1;
+		if(msg1.estimatedValue > msg2.estimatedValue) return -1;
+		if(msg1.estimatedValue < msg2.estimatedValue) return 1;
 		return 0;
 	}
 
 	@Override
 	public int compareTo(SimpleMessage msg2) {
-		if(estimatedValue < msg2.estimatedValue) return -1;
-		if(estimatedValue > msg2.estimatedValue) return 1;
+		if(estimatedValue > msg2.estimatedValue) return -1;
+		if(estimatedValue < msg2.estimatedValue) return 1;
 		return 0;
 	}
 
