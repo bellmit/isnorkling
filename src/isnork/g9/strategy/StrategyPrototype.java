@@ -10,10 +10,10 @@ import java.util.Set;
 
 public interface StrategyPrototype {
 	public void setBoardParams(BoardParams b);
-	public Direction getDirection();
+	public Direction getDirection(); // returns direction
 	public void setLocation(Point2D loc);
 	public void setPlayer(PlayerPrototype p);
 	public void setOverallStrategy(Strategy s);
-	public double getConfidence();
+	public double getConfidence(); // 0-1
 	public void setSighting(Set<Observation> s);
 }

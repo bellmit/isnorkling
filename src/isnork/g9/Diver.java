@@ -29,6 +29,7 @@ public class Diver extends Player implements PlayerPrototype {
 	private int timeElapsed;
 	private Point2D location;
 	private int desiredRadius;
+	private Direction lastDirection;
 	
 	
 	
@@ -167,5 +168,13 @@ public class Diver extends Player implements PlayerPrototype {
 
 	public void setDesiredRadius(int desiredRadius) {
 		this.desiredRadius = desiredRadius;
+	}
+
+	public Direction getLastDirection() {
+		return lastDirection;
+	}
+
+	public void setLastDirection(int lastDirection) {
+		this.lastDirection = lastDirection;
 	}
 }
