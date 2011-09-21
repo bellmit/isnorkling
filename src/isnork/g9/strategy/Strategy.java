@@ -74,11 +74,11 @@ public class Strategy {
 		System.out.println(riskAvoidance.getConfidence());
 		
 		double baseRiskConfidence = 0.5;
-		int startConsideringReturn = 90;
+		int startConsideringReturn = 120;
 		
 		if (player.getTimeElapsed() > ALL_TIME - startConsideringReturn) {
 			int tn = player.getTimeElapsed() - (ALL_TIME - startConsideringReturn);
-			baseRiskConfidence = Math.pow((tn-9) / 30.0, 2.0);
+			baseRiskConfidence = Math.pow((tn-30) / 30.0, 2.0);
 		}
 		
 		if (riskAvoidance.getConfidence() > baseRiskConfidence) {
@@ -97,7 +97,7 @@ public class Strategy {
 			
 			Suggestion suggest = player.getComm().getDirection(player.getLocation());
 			
-			if (suggest.getConfidence() > 0) {
+			if (suggest.getConfidence() > 0 && Math.random() > 0.15) {
 				Direction dir = suggest.getDir();
 				return dir;
 			} else {
