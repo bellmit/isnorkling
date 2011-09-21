@@ -82,6 +82,7 @@ public class Diver extends Player implements PlayerPrototype {
 		
 		GameParams.init(seaLifePossibilites, penalty, d, r, n);
 		commPrototype = new SimpleCommunicator();
+		commPrototype.init();
 		
 		allDivers.add(this);
 		

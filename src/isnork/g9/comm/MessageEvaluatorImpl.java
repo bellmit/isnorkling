@@ -7,8 +7,9 @@ import java.awt.geom.Point2D;
 public class MessageEvaluatorImpl<T extends Message> implements MessageEvaluator<T>{
 
 	@Override
-	public double evaluate(Point2D myLocation, T msg) {
-		return normalizeBySenderDistance(myLocation, msg) * normalizeByHVT(msg);
+	public double evaluate(Point2D myLocation, ObservationMemory memory, T msg) {
+		return normalizeBySenderDistance(myLocation, msg) * normalizeByHVT(msg)
+				* normalizeBySeenLocations(memory, msg);
 	}
 	
 	private double normalizeBySenderDistance(Point2D myLocation, T msg){
@@ -22,7 +23,13 @@ public class MessageEvaluatorImpl<T extends Message> implements MessageEvaluator
 			coeff =  1 - (theta - Math.sin(theta))/Math.PI;
 			//Should the value fall like coeff or coeff^2
 		}else{
-			coeff = r / senderDistance;
+			
+			if(msg instanceof SimpleMessage && ((SimpleMessage)msg).isDynamic()){
+				coeff = r / Math.pow(senderDistance,2);
+			}else{
+				coeff = r / senderDistance;
+			}
+			
 		}
 		//System.out.println("Distance coeff: "+coeff);
 		return coeff;
@@ -41,6 +48,23 @@ public class MessageEvaluatorImpl<T extends Message> implements MessageEvaluator
 		}
 		//System.out.println("HVT coeff: "+coeff);
 		return coeff;
+	}
+	
+	private double normalizeBySeenLocations(ObservationMemory memory, T msg){
+		
+		double dist = memory.closestDistanceToLocation(msg.getSenderLocation());
+		
+		if(msg instanceof SimpleMessage){
+			if(!((SimpleMessage)msg).isDynamic()){
+				if(dist == 0)return 0;
+				else return dist / (2*Math.sqrt(2)*GameParams.getGridSize());
+			}else{
+				return dist / (2*Math.sqrt(2)*GameParams.getGridSize());
+			}
+		}
+				
+		return 1;
+		
 	}
 
 }

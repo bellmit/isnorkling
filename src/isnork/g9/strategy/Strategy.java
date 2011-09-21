@@ -31,7 +31,7 @@ public class Strategy {
 		riskAvoidance = new RiskAvoidance();
 		riskAvoidance.setPlayer(p);
 		
-		global = new GlobalPrototypeStrategy();
+		global = new GlobalRadial();
 		global.setPlayer(p);
 		
 		returning = new Return();

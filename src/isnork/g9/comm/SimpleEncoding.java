@@ -114,6 +114,7 @@ public class SimpleEncoding implements Encoding {
 			
 			sMsg.setEstimatedValue((rawMsg & 1)*scalingFactorS);
 		}
+		sMsg.setValFromWire(sMsg.getEstimatedValue());
 		
 		return sMsg;
 	}

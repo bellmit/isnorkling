@@ -14,4 +14,6 @@ public interface CommPrototype {
 			Set<Observation> playerLocations);
 	
 	public Suggestion getDirection(Point2D myPosition);
+	
+	public void init();
 }

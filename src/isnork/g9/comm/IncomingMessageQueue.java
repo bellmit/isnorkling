@@ -15,7 +15,7 @@ public class IncomingMessageQueue {
 	
 	private int ticker = 0;
 	private Message currentDest = null;
-	private static final int NUM_TURNS_TO_FOLLOW_TARGET = 5;
+	private static final int NUM_TURNS_TO_FOLLOW_TARGET = 3;
 	
 	private PriorityQueue<Message> msgHeap = new PriorityQueue<Message>();
 	private static final Direction[] choices = new Direction[] {Direction.E, Direction.NE,
@@ -30,11 +30,15 @@ public class IncomingMessageQueue {
 			return new Suggestion(GameObject.Direction.STAYPUT,1);
 		}
 		
-		if(currentDest == null || (ticker % NUM_TURNS_TO_FOLLOW_TARGET == 0
+		if(currentDest == null || currentDest.getSenderLocation().distance(myPosition)==0
+				|| (ticker % NUM_TURNS_TO_FOLLOW_TARGET == 0
 				&& currentDest.getEstimatedValue() < msgHeap.peek().getEstimatedValue())){
 			currentDest = msgHeap.remove();
 		}
 		Point2D dest = currentDest.getSenderLocation();
+		
+		
+		
 		System.out.println("Comm Dest: "+dest);
 		System.out.println("Received Estimated value: "+ currentDest.getEstimatedValue());
 		//Simulator id screwed up. The Y axis is flipped
@@ -50,14 +54,15 @@ public class IncomingMessageQueue {
 	}
 	
 	public void load(Point2D myPosition, Set<Observation> whatYouSee, Set<iSnorkMessage> incomingMessages,
-			Set<Observation> playerLocations, Encoding encoding){
+			Set<Observation> playerLocations, ObservationMemory memory, Encoding encoding){
 		
 		tick();
+		MessageEvaluator<Message> evaluator = new MessageEvaluatorImpl<Message>();
+		
 		
 		for(iSnorkMessage iMsg : incomingMessages){
 			Message msg = encoding.decode(iMsg);
-			MessageEvaluator<Message> evaluator = new MessageEvaluatorImpl<Message>();
-			double val = evaluator.evaluate(myPosition, msg);
+			double val = evaluator.evaluate(myPosition, memory, msg);
 			msg.setEstimatedValue(val);
 			if(val > 0 && val < 1){
 				System.out.println("Loading Estimate: "+msg.getEstimatedValue());

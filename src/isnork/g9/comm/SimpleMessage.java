@@ -16,12 +16,25 @@ public class SimpleMessage implements Message,Comparator<SimpleMessage>, Compara
 	public SimpleMessage(){}	
 	
 	private double estimatedValue;
+	private double valFromWire;
 	private boolean dynamic;
 	private int age=0;
 	
-	
+	public double getValFromWire() {
+		return valFromWire;
+	}
+
+	public void setValFromWire(double valFromWire) {
+		this.valFromWire = valFromWire;
+	}
+
 	@Override
-	public void age(){age++;}
+	public void age(){
+		age++;
+		if(dynamic && age>2){
+			estimatedValue /= age;
+		}
+		}
 	
 	@Override
 	public boolean die(){

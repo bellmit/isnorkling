@@ -1,5 +1,6 @@
 package isnork.g9.comm;
 
+import isnork.g9.utils.GameParams;
 import isnork.sim.Observation;
 import isnork.sim.SeaLifePrototype;
 import isnork.sim.iSnorkMessage;
@@ -12,6 +13,7 @@ public class SimpleCommunicator implements CommPrototype {
 	protected RecentlyCommunicatedSightings recentSightings = new RecentlyCommunicatedSightings();
 	protected Encoding encoding = new SimpleEncoding();
 	protected IncomingMessageQueue queuedMessages = new IncomingMessageQueue();
+	protected ObservationMemory memory = new ObservationMemory<Observation, SeaLifePrototype>();
 
 	@Override
 	public String createMessage(Point2D myPosition,
@@ -40,13 +42,22 @@ public class SimpleCommunicator implements CommPrototype {
 	private void processIncoming(Point2D myPosition,
 			Set<Observation> whatYouSee, Set<iSnorkMessage> incomingMessages,
 			Set<Observation> playerLocations) {
-		queuedMessages.load(myPosition, whatYouSee,  incomingMessages, playerLocations,encoding);
+		memory.processObservations(whatYouSee);
+		queuedMessages.load(myPosition, whatYouSee,  incomingMessages, playerLocations,
+				memory, encoding);
+		
 		
 	}
 
 	@Override
 	public Suggestion getDirection(Point2D myPosition) {
 		return queuedMessages.getHVTDirection(myPosition);
+	}
+
+	@Override
+	public void init() {
+		memory.init(GameParams.getSeaLifePossibilites());
+		
 	}
 	
 
