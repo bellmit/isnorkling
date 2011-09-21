@@ -106,6 +106,7 @@ public class SimpleEncoding implements Encoding {
 			sMsg.setEstimatedValue(rawMsg*scalingFactorD);
 		}
 		else{
+			
 			sMsg.setEstimatedValue((rawMsg & 1)*scalingFactorS);
 		}
 		
