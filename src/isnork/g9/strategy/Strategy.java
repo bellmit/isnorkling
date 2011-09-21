@@ -78,7 +78,7 @@ public class Strategy {
 			
 			Suggestion suggest = player.getComm().getDirection(player.getLocation());
 			
-			if (suggest.getConfidence() > 0) {
+			if (suggest.getConfidence() > 0.2) {
 				Direction dir = suggest.getDir();
 				return dir;
 			} else {

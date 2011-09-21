@@ -13,6 +13,10 @@ import java.util.Set;
 
 public class IncomingMessageQueue {
 	
+	private int ticker = 0;
+	private Message currentDest = null;
+	private static final int NUM_TURNS_TO_FOLLOW_TARGET = 5;
+	
 	private PriorityQueue<Message> msgHeap = new PriorityQueue<Message>();
 	private static final Direction[] choices = new Direction[] {Direction.E, Direction.NE,
 		Direction.N, Direction.NW, Direction.W, Direction.SW, Direction.S, Direction.SE,
@@ -26,10 +30,13 @@ public class IncomingMessageQueue {
 			return new Suggestion(GameObject.Direction.STAYPUT,1);
 		}
 		
-		Message msg = msgHeap.remove();
-		Point2D dest = msg.getSenderLocation();
+		if(currentDest == null || (ticker % NUM_TURNS_TO_FOLLOW_TARGET == 0
+				&& currentDest.getEstimatedValue() < msgHeap.peek().getEstimatedValue())){
+			currentDest = msgHeap.remove();
+		}
+		Point2D dest = currentDest.getSenderLocation();
 		System.out.println("Comm Dest: "+dest);
-		System.out.println("Received Estimated value: "+ msg.getEstimatedValue());
+		System.out.println("Received Estimated value: "+ currentDest.getEstimatedValue());
 		//Simulator id screwed up. The Y axis is flipped
 		double thetaRad = Math.atan2(myPosition.getY()-dest.getY(), dest.getX()-myPosition.getX());
 		double thetaDeg = thetaRad * 180 / Math.PI;
@@ -37,7 +44,8 @@ public class IncomingMessageQueue {
 		int dirChoice = ((int)thetaDeg)/45 + ( ((int) thetaDeg)%45 < 23 ? 0 : 1);
 		System.out.println("My location: "+ myPosition);
 		System.out.println("Comm Direction : "+choices[dirChoice]);
-		return new Suggestion(choices[dirChoice],msg.getEstimatedValue());
+		
+		return new Suggestion(choices[dirChoice],currentDest.getEstimatedValue());
 		
 	}
 	
@@ -71,6 +79,8 @@ public class IncomingMessageQueue {
 		
 		for(Message msg : deadMessages)
 			msgHeap.remove(msg);
+		if(currentDest!=null) currentDest.age();		
+		ticker++;
 	}
 
 }
