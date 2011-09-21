@@ -36,8 +36,7 @@ public class IncomingMessageQueue {
 		if(thetaDeg < 0 ) thetaDeg += 360;
 		int dirChoice = ((int)thetaDeg)/45 + ( ((int) thetaDeg)%45 < 23 ? 0 : 1);
 		
-		return new Suggestion(choices[dirChoice],
-				((double)msg.getEstimatedValue())/GameParams.getOverallHVT());
+		return new Suggestion(choices[dirChoice],msg.getEstimatedValue());
 		
 	}
 	
