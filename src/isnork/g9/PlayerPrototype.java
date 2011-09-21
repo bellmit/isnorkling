@@ -19,4 +19,5 @@ public interface PlayerPrototype {
 	public int getId();
 	public CommPrototype getComm();
 	public Random getRandom();
+	
 }

@@ -1,6 +1,7 @@
 package isnork.g9;
 
 import java.awt.geom.Point2D;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Random;
 import java.util.Set;
@@ -20,13 +21,16 @@ import isnork.sim.iSnorkMessage;
 import isnork.sim.GameObject.Direction;
 
 public class Diver extends Player implements PlayerPrototype {
-	private static HashSet<PlayerPrototype> allDivers = new HashSet<PlayerPrototype>();
+	private static HashSet<Diver> allDivers = new HashSet<Diver>();
 	
 	private Strategy strategy;
 	private Set<Observation> sighting;
 	private Memory memory;
 	private int timeElapsed;
 	private Point2D location;
+	private int desiredRadius;
+	
+	
 	
 	private CommPrototype commPrototype = null;
 	
@@ -92,7 +96,45 @@ public class Diver extends Player implements PlayerPrototype {
 			rd.setBoardParams(params);
 			rd.setOverallRiskProfile(re.getOverallRiskProfile());
 			
-			rd.distribute((Set<PlayerPrototype>) allDivers);
+			rd.distribute((Set<Diver>) allDivers);
+			
+			// Calculating all of the radii to be assigned to various divers
+			
+			int boardRadius=GameParams.getGridSize();
+			int numberOfDivers=GameParams.getNumDivers();
+			int visibilityRadius=GameParams.getVisibilityRadius();
+			int numberOfCircles = (int) Math.ceil((boardRadius- 2*visibilityRadius)/visibilityRadius);
+			int tempVariable=0;
+			for( int i=0; i< numberOfCircles; i++){
+				tempVariable =tempVariable + i;
+			}
+			int totalDistance = (int) (numberOfCircles + 4*Math.PI*visibilityRadius*tempVariable);
+			int averageDistance = (int) totalDistance /numberOfDivers;
+
+			int circleRadius, numDivers;
+			ArrayList<Integer> radii = new ArrayList<Integer>();
+			ArrayList<Integer> numDiversPerCircle = new ArrayList<Integer>();
+			for (int i=0; i < numberOfCircles; i++) {
+				circleRadius = visibilityRadius * (1 + 2 * numberOfCircles);
+				numDivers = (int) Math.floor( 2 * Math.PI * circleRadius / averageDistance );
+				numDiversPerCircle.add(numDivers);			
+				}
+			
+			int diversRemaining = 0;
+			int i = 0;
+			// Distribute desired radii across all divers 
+			for ( Diver diver : allDivers ) {
+				diversRemaining = numDiversPerCircle.get(i);
+				if (diversRemaining > 0) {
+					diversRemaining--;
+					numDiversPerCircle.set(i, diversRemaining);
+					diver.setDesiredRadius(radii.get(i));
+				} else if (diversRemaining == 0) {
+					i++;
+				}
+				
+			}
+			
 		}
 	}
 
@@ -119,4 +161,11 @@ public class Diver extends Player implements PlayerPrototype {
 		return strategy.getDirection();
 	}
 
+	public int getDesiredRadius() {
+		return desiredRadius;
+	}
+
+	public void setDesiredRadius(int desiredRadius) {
+		this.desiredRadius = desiredRadius;
+	}
 }
