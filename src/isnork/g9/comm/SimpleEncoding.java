@@ -47,6 +47,11 @@ public class SimpleEncoding implements Encoding {
 		int msg = 0;
 		String str = null;
 				
+		//TODO this shouldn't happen
+		if (obs==null) {
+			return "y";
+		}
+		
 		//Static or Dynamic
 		if(obs.getDirection() == GameObject.Direction.STAYPUT){
 			

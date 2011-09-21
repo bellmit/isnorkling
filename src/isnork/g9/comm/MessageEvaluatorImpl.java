@@ -8,7 +8,7 @@ public class MessageEvaluatorImpl<T extends Message> implements MessageEvaluator
 
 	@Override
 	public double evaluate(Point2D myLocation, T msg) {
-		return msg.getEstimatedValue() * normalizeBySenderDistance(myLocation, msg) * normalizeByHVT(msg);
+		return normalizeBySenderDistance(myLocation, msg) * normalizeByHVT(msg);
 	}
 	
 	private double normalizeBySenderDistance(Point2D myLocation, T msg){

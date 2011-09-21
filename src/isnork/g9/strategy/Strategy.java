@@ -1,6 +1,7 @@
 package isnork.g9.strategy;
 
 import isnork.g9.PlayerPrototype;
+import isnork.g9.comm.Suggestion;
 import isnork.g9.utils.risk.IndividualRiskProfile;
 import isnork.sim.GameObject.Direction;
 import isnork.sim.Observation;
@@ -68,14 +69,21 @@ public class Strategy {
 		global.setLocation(player.getLocation());
 		
 		//In the beginning, try to spread out
-		if (player.getTimeElapsed() < 150) {
+		if (player.getTimeElapsed() < 60) {
 			return global.getDirection();
 		//TODO don't hardcode this
 		} else if (player.getTimeElapsed() > 350) {
 			return returning.getDirection();
 		} else {
-			Direction dir = player.getComm().getDirection(player.getLocation()).getDir();
-			return dir;
+			
+			Suggestion suggest = player.getComm().getDirection(player.getLocation());
+			
+			if (suggest.getConfidence() > 0) {
+				Direction dir = player.getComm().getDirection(player.getLocation()).getDir();
+				return dir;
+			} else {
+				return random.getDirection();
+			}
 		}
 		
 	}
