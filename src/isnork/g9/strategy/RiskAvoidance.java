@@ -1,6 +1,7 @@
 package isnork.g9.strategy;
 
 import isnork.g9.PlayerPrototype;
+import isnork.g9.utils.BoardParams;
 import isnork.g9.utils.risk.IndividualRiskProfile;
 import isnork.sim.Observation;
 import isnork.sim.GameObject.Direction;
@@ -10,7 +11,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
-public class RiskAvoidance implements RiskAvoidancePrototype {
+public class RiskAvoidance implements StrategyPrototype {
 
 	private PlayerPrototype player;
 	private Set<Observation> sighting;
@@ -31,8 +32,7 @@ public class RiskAvoidance implements RiskAvoidancePrototype {
 		risk = strategy.getRisk();
 	}
 
-	@Override
-	public void setDangerousSighting(Set<Observation> s) {
+	public void setSighting(Set<Observation> s) {
 		sighting = s;
 	}
 
@@ -113,5 +113,17 @@ public class RiskAvoidance implements RiskAvoidancePrototype {
 	@Override
 	public double getConfidence() {
 		return confidence;
+	}
+
+	@Override
+	public void setBoardParams(BoardParams b) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void setLocation(Point2D loc) {
+		// TODO Auto-generated method stub
+		
 	}
 }

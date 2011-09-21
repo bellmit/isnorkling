@@ -19,12 +19,11 @@ public class Strategy {
 	private IndividualRiskProfile risk;
 	private PlayerPrototype player;
 	
-	private LocalBenignSightingPrototype local;
-	private GlobalPrototype global;
-	private RiskAvoidancePrototype riskAvoidance;
-	private Return returning;
+	private StrategyPrototype global;
+	private StrategyPrototype riskAvoidance;
+	private StrategyPrototype returning;
 	
-	private Set<Observation> sighting;
+	private StrategyPrototype random;
 	
 	public Strategy(PlayerPrototype p) {
 		player = p;
@@ -34,11 +33,11 @@ public class Strategy {
 		
 		global = new GlobalPrototypeStrategy();
 		global.setPlayer(p);
-		local = new LocalBenignSighting();
-		local.setPlayer(p);
 		
 		returning = new Return();
 		returning.setPlayer(p);
+		
+		random = new RandomWalk();
 	}
 	
 	public void setRisk(IndividualRiskProfile r) {
@@ -50,21 +49,14 @@ public class Strategy {
 	}
 	
 	public void setSighting(Set<Observation> sighting) {
-		this.sighting = sighting;
-		
 		HashSet<Observation> dangerous = new HashSet<Observation>();
-		HashSet<Observation> benign = new HashSet<Observation>();
-		
 		for (Observation ob : sighting) {
 			if (ob.isDangerous()) {
 				dangerous.add(ob);
-			} else {
-				benign.add(ob);
 			}
 		}
 		
-		local.setObservations(benign);
-		riskAvoidance.setDangerousSighting(dangerous);
+		riskAvoidance.setSighting(dangerous);
 	}
 	
 	//stub
@@ -77,13 +69,13 @@ public class Strategy {
 		global.setLocation(player.getLocation());
 		
 		//In the beginning, try to spread out
-		if (player.getTimeElapsed() < 60) {
+		if (player.getTimeElapsed() < 150) {
 			return global.getDirection();
 		//TODO don't hardcode this
-		} else if (player.getTimeElapsed() > 400) {
+		} else if (player.getTimeElapsed() > 350) {
 			return returning.getDirection();
 		} else {
-			return global.getDirection();
+			return random.getDirection();
 			//return player.getComm().getDirection(player.getLocation()).getDir();
 		}
 		

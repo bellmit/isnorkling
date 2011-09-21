@@ -2,11 +2,14 @@ package isnork.g9.strategy;
 
 import java.awt.geom.Point2D;
 import java.util.List;
+import java.util.Set;
 
 import isnork.g9.PlayerPrototype;
+import isnork.g9.utils.BoardParams;
 import isnork.sim.GameObject.Direction;
+import isnork.sim.Observation;
 
-public class Return {
+public class Return implements StrategyPrototype {
 	private PlayerPrototype player;
 	
 	public void setPlayer(PlayerPrototype p) {
@@ -31,5 +34,34 @@ public class Return {
 		}
 		
 		return Direction.STAYPUT;
+	}
+
+	@Override
+	public void setBoardParams(BoardParams b) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void setLocation(Point2D loc) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void setOverallStrategy(Strategy s) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public double getConfidence() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public void setSighting(Set<Observation> s) {
+		// TODO Auto-generated method stub
+		
 	}
 }
