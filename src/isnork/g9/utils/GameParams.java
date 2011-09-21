@@ -45,9 +45,13 @@ public class GameParams {
 					maxd = seaLifePrototype.getHappiness();
 			}
 			
-			staticHVT = maxs;
-			dynamicHVT = maxd;
+			staticHVT = maxs < 0 ? 0 : maxs;
+			dynamicHVT = maxd < 0 ? 0 : maxd;
 			overallHVT = staticHVT > dynamicHVT ? staticHVT : dynamicHVT;
+			System.out.println("Initialized Game Params");
+			System.out.println("StaticHVT: "+staticHVT);
+			System.out.println("DynamicHVT: "+dynamicHVT);
+			System.out.println("OverallHVT: "+overallHVT);
 	
 		}
 

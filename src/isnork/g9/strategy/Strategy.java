@@ -20,6 +20,8 @@ public class Strategy {
 	private IndividualRiskProfile risk;
 	private PlayerPrototype player;
 	
+	private static final int ALL_TIME = 480;
+	
 	private StrategyPrototype global;
 	private StrategyPrototype riskAvoidance;
 	private StrategyPrototype returning;
@@ -71,7 +73,15 @@ public class Strategy {
 		
 		System.out.println(riskAvoidance.getConfidence());
 		
-		if (riskAvoidance.getConfidence() > 0.5) {
+		double baseRiskConfidence = 0.5;
+		int startConsideringReturn = 90;
+		
+		if (player.getTimeElapsed() > ALL_TIME - startConsideringReturn) {
+			int tn = player.getTimeElapsed() - (ALL_TIME - startConsideringReturn);
+			baseRiskConfidence = Math.pow((tn-9) / 30.0, 2.0);
+		}
+		
+		if (riskAvoidance.getConfidence() > baseRiskConfidence) {
 			return escape;
 		}
 		
@@ -81,14 +91,14 @@ public class Strategy {
 		if (player.getTimeElapsed() < 60) {
 			return global.getDirection();
 		//TODO don't hardcode this
-		} else if (player.getTimeElapsed() > 350) {
+		} else if (player.getTimeElapsed() > ALL_TIME - startConsideringReturn) {
 			return returning.getDirection();
 		} else {
 			
 			Suggestion suggest = player.getComm().getDirection(player.getLocation());
 			
 			if (suggest.getConfidence() > 0) {
-				Direction dir = player.getComm().getDirection(player.getLocation()).getDir();
+				Direction dir = suggest.getDir();
 				return dir;
 			} else {
 				return random.getDirection();
