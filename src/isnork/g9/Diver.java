@@ -80,6 +80,8 @@ public class Diver extends Player implements PlayerPrototype {
 		//TODO use penalty and r for something
 		BoardParams params = new BoardParams(seaLifePossibilites, d, n);
 		
+		strategy.setBoardParams(params);
+		
 		GameParams.init(seaLifePossibilites, penalty, d, r, n);
 		commPrototype = new SimpleCommunicator();
 		

@@ -5,6 +5,7 @@ import isnork.g9.utils.BoardParams;
 import isnork.g9.utils.risk.IndividualRiskProfile;
 import isnork.sim.Observation;
 import isnork.sim.GameObject.Direction;
+import isnork.sim.SeaLifePrototype;
 
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
@@ -18,6 +19,9 @@ public class RiskAvoidance implements StrategyPrototype {
 	private double confidence;
 	private Strategy strategy;
 	private IndividualRiskProfile risk;
+	private BoardParams board;
+	
+	private static double avgRisk = -1;
 	
 	private ArrayList<Direction> dirs = Direction.allBut(null);
 	
@@ -47,16 +51,18 @@ public class RiskAvoidance implements StrategyPrototype {
 		
 		for (Observation ob : sighting) {
 			ObservationWrapper o = new ObservationWrapper();
-			o.happiness = ob.happiness();
+			o.happiness = getHappiness(ob.getName());
 			o.direction = ob.getDirection();
 			o.id = ob.getId();
 			o.location = ob.getLocation();
 			
+			if (o.location == null || o.direction == null) { continue; }
 			
 			o.location.setLocation(o.location.getX() + o.direction.dx, o.location.getY() + o.direction.dy);
 			
 			nextSighting.add(o);
 		}
+		
 		
 		double minDanger = Double.MAX_VALUE;
 		Direction curDir = Direction.STAYPUT;
@@ -71,26 +77,44 @@ public class RiskAvoidance implements StrategyPrototype {
 			}
 		}
 		
+		if (minDanger == Double.MAX_VALUE) { minDanger = 0; }
+		
 		//TODO this is really primitive, not taking into consideration of board params, etc.
-		confidence = 0.5 * Math.min(sighting.size() / 10, 1) + 0.5 * Math.min(minDanger / 200, 1);
+		confidence = Math.min(minDanger / avgRisk, 1.0);
+		System.out.println("avgRisk: " + avgRisk);
+		System.out.println("confidence prepared: " + confidence);
+		//confidence = 0.5 * Math.min(sighting.size() / 10, 1) + 0.5 * Math.min(minDanger / 200, 1);
 		
 		//Adjust by risk profile
-		confidence *= Math.sqrt(risk.getRiskAvoidance());
+		//confidence *= Math.sqrt(risk.getRiskAvoidance());
 		
 		return curDir;
+	}
+	
+	private int getHappiness(String name) {
+		ArrayList<SeaLifePrototype> sealife = board.getArrayListOfSeaLifePrototypes();
+		for (SeaLifePrototype sl : sealife) {
+			if (sl.getName().equals(name)) {
+				return sl.getHappiness();
+			}
+		}
+		return 0;
 	}
 	
 	//Heuristics of estimating how dangerous a sighting configuration is 
 	private double weightedDanger(Set<ObservationWrapper> sighting, Point2D loc) {
 		double danger = 0;
 		for (ObservationWrapper ob : sighting) {
-			if (loc.distance(ob.location) <= 1.5) {
-				danger+=ob.happiness*2;
+			
+			double distance = loc.distance(ob.location);
+			
+			if (distance <= 1.5) {
+				danger+=Math.abs(ob.happiness*2);
 			} else {
 				double badFactor = 0.79;
 				double goodFactor = 0.03;
 				
-				double temp = ob.happiness*2 / Math.pow(loc.distance(ob.location), 2);
+				double temp = ob.happiness*2 / Math.pow(distance, 2);
 				
 				double dy = ob.direction.dy;
 				double dx = ob.direction.dx;
@@ -102,14 +126,14 @@ public class RiskAvoidance implements StrategyPrototype {
 				} else {
 					temp*=goodFactor;
 				}
-				
-				danger+=temp;
+				danger+=Math.abs(temp);
 			}
+			
 		}
 		
 		return danger;
 	}
-
+	
 	@Override
 	public double getConfidence() {
 		return confidence;
@@ -117,8 +141,20 @@ public class RiskAvoidance implements StrategyPrototype {
 
 	@Override
 	public void setBoardParams(BoardParams b) {
-		// TODO Auto-generated method stub
+		board = b;
 		
+		if (avgRisk == -1) {
+			
+			int totalHappiness = 0;
+			
+			for (SeaLifePrototype ssl : b.getArrayListOfSeaLifePrototypes()) {
+				
+				if (!ssl.isDangerous()) { continue; }
+				totalHappiness+=ssl.getHappiness();
+			}
+			
+			avgRisk = totalHappiness * 2.0 * 2.0 * 9.0 / (b.getDimension() * b.getDimension() * 4);
+		}
 	}
 
 	@Override

@@ -2,6 +2,7 @@ package isnork.g9.strategy;
 
 import isnork.g9.PlayerPrototype;
 import isnork.g9.comm.Suggestion;
+import isnork.g9.utils.BoardParams;
 import isnork.g9.utils.risk.IndividualRiskProfile;
 import isnork.sim.GameObject.Direction;
 import isnork.sim.Observation;
@@ -40,6 +41,10 @@ public class Strategy {
 		random = new RandomWalk();
 	}
 	
+	public void setBoardParams(BoardParams b) {
+		riskAvoidance.setBoardParams(b);
+	}
+	
 	public void setRisk(IndividualRiskProfile r) {
 		risk = r;
 	}
@@ -62,8 +67,12 @@ public class Strategy {
 	//stub
 	public Direction getDirection() {
 		
+		Direction escape = riskAvoidance.getDirection();
+		
+		System.out.println(riskAvoidance.getConfidence());
+		
 		if (riskAvoidance.getConfidence() > 0.5) {
-			return riskAvoidance.getDirection();
+			return escape;
 		}
 		
 		global.setLocation(player.getLocation());

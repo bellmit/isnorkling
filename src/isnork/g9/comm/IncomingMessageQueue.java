@@ -29,7 +29,6 @@ public class IncomingMessageQueue {
 		
 		Message msg = msgHeap.remove();
 		Point2D dest = msg.getSenderLocation();
-		System.out.println("Comm Dest: "+dest);
 		
 		double thetaRad = Math.atan2(dest.getY()-myPosition.getY(), dest.getX()-myPosition.getX());
 		double thetaDeg = thetaRad * Math.PI / 180;
