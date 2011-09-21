@@ -29,8 +29,7 @@ public class SimpleCommunicator implements CommPrototype {
 		 */
 		
 		processIncoming(myPosition, whatYouSee,  incomingMessages, playerLocations);
-		//System.out.println(encoding.encode(recentSightings.tick().getNewHVT(whatYouSee), myPosition));
-		String msg = encoding.encode(recentSightings.tick().getNewHVT(whatYouSee), myPosition);
+		String msg = encoding.encode(recentSightings.getNewHVT(whatYouSee), myPosition);
 		if(msg == null){
 			System.out.println("COMM WARN: Sending null msg");
 		}
@@ -47,7 +46,7 @@ public class SimpleCommunicator implements CommPrototype {
 
 	@Override
 	public Suggestion getDirection(Point2D myPosition) {
-		return queuedMessages.tick().getHVTDirection(myPosition);
+		return queuedMessages.getHVTDirection(myPosition);
 	}
 	
 

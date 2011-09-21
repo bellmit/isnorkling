@@ -82,8 +82,9 @@ public class Strategy {
 		} else if (player.getTimeElapsed() > 400) {
 			return returning.getDirection();
 		} else {
-			System.out.println("Getting direction from comm");
-			return player.getComm().getDirection(player.getLocation()).getDir();
+			Direction dir = player.getComm().getDirection(player.getLocation()).getDir();
+			System.out.println("Getting direction from comm: "+dir);
+			return dir;
 		}
 		
 	}

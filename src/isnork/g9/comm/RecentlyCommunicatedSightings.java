@@ -14,7 +14,7 @@ public class RecentlyCommunicatedSightings {
 	
 	private Map<Integer, CommunicatedSighting> recentlyCommunicatedSightings = new HashMap<Integer, CommunicatedSighting>();
 	
-	public RecentlyCommunicatedSightings tick(){
+	private void tick(){
 		
 		List<CommunicatedSighting> deadSightings = new ArrayList<CommunicatedSighting>();
 		for(CommunicatedSighting sighting : recentlyCommunicatedSightings.values()){
@@ -25,13 +25,11 @@ public class RecentlyCommunicatedSightings {
 		for(CommunicatedSighting deadSighting : deadSightings){
 			recentlyCommunicatedSightings.remove(deadSighting.getObs().getId());
 		}
-		
-		return this;
 	}
 	
 	
 	public Observation getNewHVT(Set<Observation> whatYouSee){
-		
+		tick();
 		int max = -1;
 		Observation newHVT = null;
 		Iterator<Observation> iter = whatYouSee.iterator();

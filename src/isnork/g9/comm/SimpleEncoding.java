@@ -3,11 +3,9 @@ package isnork.g9.comm;
 import isnork.g9.utils.GameParams;
 import isnork.sim.GameObject;
 import isnork.sim.Observation;
-import isnork.sim.SeaLifePrototype;
+import isnork.sim.iSnorkMessage;
 
 import java.awt.geom.Point2D;
-import java.util.Iterator;
-import java.util.Set;
 
 /**
  *  
@@ -87,30 +85,30 @@ public class SimpleEncoding implements Encoding {
 	}
 
 	@Override
-	public Message decode(String str) {
+	public Message decode(iSnorkMessage iMsg) {
 		
-		SimpleMessage msg = new SimpleMessage();
+		String str = iMsg.getMsg();
+		SimpleMessage sMsg = new SimpleMessage(iMsg);
 		
 		if(str==null){
 			System.out.println("COMM ERROR: Received null incoming message");
-			msg.setEstValue(NEG_INFINITY);
-			return msg;
+			sMsg.setEstimatedValue(NEG_INFINITY);
+			return sMsg;
 		}
 		
 		
 		int rawMsg = (int)str.charAt(0);
-		msg.setRawMsg(str);
 		
 		boolean isDynamic = (rawMsg & (1<<4)) == 0;
-		msg.setDynamic(isDynamic);
+		sMsg.setDynamic(isDynamic);
 		
 		if(isDynamic){
-			msg.setEstValue(rawMsg*scalingFactorD);
+			sMsg.setEstimatedValue(rawMsg*scalingFactorD);
 		}
 		else{
-			msg.setEstValue((rawMsg & 1)*scalingFactorS);
+			sMsg.setEstimatedValue((rawMsg & 1)*scalingFactorS);
 		}
 		
-		return msg;
+		return sMsg;
 	}
 }
