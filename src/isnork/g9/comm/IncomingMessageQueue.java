@@ -1,22 +1,24 @@
 package isnork.g9.comm;
 
+import isnork.g9.utils.GameParams;
 import isnork.sim.GameObject;
+import isnork.sim.GameObject.Direction;
 import isnork.sim.Observation;
 import isnork.sim.iSnorkMessage;
-import isnork.sim.GameObject.Direction;
 
 import java.awt.geom.Point2D;
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.util.PriorityQueue;
 import java.util.Set;
 
 public class IncomingMessageQueue {
 	
-	private PriorityQueue<SimpleMessage> msgHeap = new PriorityQueue<SimpleMessage>();
-	private Direction[] choices = new Direction[] { Direction.N, Direction.NW, 
-			Direction.W, Direction.SW, Direction.S, 
-            Direction.SE, Direction.E, Direction.NE, 
-            Direction.STAYPUT }; 
+	private PriorityQueue<Message> msgHeap = new PriorityQueue<Message>();
+	private static final Direction[] choices = new Direction[] {Direction.E, Direction.NE,
+		Direction.N, Direction.NW, Direction.W, Direction.SW, Direction.S, Direction.SE,
+		Direction.STAYPUT}; 
 	
 	
 	public Suggestion getHVTDirection(Point2D myPosition){
@@ -25,45 +27,45 @@ public class IncomingMessageQueue {
 			return new Suggestion(GameObject.Direction.STAYPUT,1);
 		}
 		
-		SimpleMessage msg = msgHeap.remove();
-		Point2D dest = msg.getDiverCoord();
+		Message msg = msgHeap.remove();
+		Point2D dest = msg.getSenderLocation();
+		System.out.println("Comm Dest: "+dest);
 		
 		double thetaRad = Math.atan2(dest.getY()-myPosition.getY(), dest.getX()-myPosition.getX());
 		double thetaDeg = thetaRad * Math.PI / 180;
 		if(thetaDeg < 0 ) thetaDeg += 360;
+		int dirChoice = ((int)thetaDeg)/45 + ( ((int) thetaDeg)%45 < 23 ? 0 : 1);
 		
-		int choice = (int) thetaDeg/45;
-		
-		return new Suggestion(choices[choice],
-				((double)msg.getEstValue())/SimpleEncoding.getMaxVal());
+		return new Suggestion(choices[dirChoice],msg.getEstimatedValue());
 		
 	}
 	
 	public void load(Point2D myPosition, Set<Observation> whatYouSee, Set<iSnorkMessage> incomingMessages,
 			Set<Observation> playerLocations, Encoding encoding){
 		
-		Iterator<iSnorkMessage> iter = incomingMessages.iterator();
+		tick();
 		
-		while(iter.hasNext()){
-			iSnorkMessage iMsg = iter.next();
-			SimpleMessage sMsg = (SimpleMessage) encoding.decode(iMsg.getMsg());
-			sMsg.setDiverCoord(iMsg.getLocation());
-			msgHeap.add(sMsg);
+		for(iSnorkMessage iMsg : incomingMessages){
+			Message msg = encoding.decode(iMsg);
+			MessageEvaluator evaluator = new MessageEvaluatorImpl<Message>();
+			msg.setEstimatedValue(evaluator.evaluate(myPosition, msg));
+			msgHeap.add(msg);
 			
 		}
 		
 	}
 	
-	public IncomingMessageQueue tick(){
+	private void tick(){
 		
-		Iterator<SimpleMessage> iter = msgHeap.iterator();
-		while(iter.hasNext()){
-			SimpleMessage msg = iter.next();
+		List<Message> deadMessages = new ArrayList<Message>();
+		
+		for(Message msg : msgHeap){
 			msg.age();
-			if(msg.die())msgHeap.remove(msg);
+			if(msg.die())deadMessages.add(msg);
 		}
 		
-		return this;
+		for(Message msg : deadMessages)
+			msgHeap.remove(msg);
 	}
 
 }

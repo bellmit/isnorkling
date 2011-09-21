@@ -10,7 +10,7 @@ import java.util.Set;
 public class SimpleCommunicator implements CommPrototype {
 	
 	protected RecentlyCommunicatedSightings recentSightings = new RecentlyCommunicatedSightings();
-	protected Encoding encoding;
+	protected Encoding encoding = new SimpleEncoding();
 	protected IncomingMessageQueue queuedMessages = new IncomingMessageQueue();
 
 	@Override
@@ -29,8 +29,11 @@ public class SimpleCommunicator implements CommPrototype {
 		 */
 		
 		processIncoming(myPosition, whatYouSee,  incomingMessages, playerLocations);
-		//System.out.println(encoding.encode(recentSightings.tick().getNewHVT(whatYouSee), myPosition));
-		return encoding.encode(recentSightings.tick().getNewHVT(whatYouSee), myPosition);
+		String msg = encoding.encode(recentSightings.getNewHVT(whatYouSee), myPosition);
+		if(msg == null){
+			System.out.println("COMM WARN: Sending null msg");
+		}
+		return msg;
 		
 	}
 
@@ -43,18 +46,7 @@ public class SimpleCommunicator implements CommPrototype {
 
 	@Override
 	public Suggestion getDirection(Point2D myPosition) {
-		return queuedMessages.tick().getHVTDirection(myPosition);
-	}
-	
-	
-	
-	@Override
-	public void init(Set<SeaLifePrototype> seaLifePossibilites, int penalty,
-			int d, int r, int n) {
-		
-		encoding = new SimpleEncoding();
-		encoding.init(seaLifePossibilites, penalty, d, r, n);
-		
+		return queuedMessages.getHVTDirection(myPosition);
 	}
 	
 

@@ -9,6 +9,7 @@ import isnork.g9.comm.CommPrototype;
 import isnork.g9.comm.SimpleCommunicator;
 import isnork.g9.strategy.Strategy;
 import isnork.g9.utils.BoardParams;
+import isnork.g9.utils.GameParams;
 import isnork.g9.utils.risk.IndividualRiskProfile;
 import isnork.g9.utils.risk.RiskDistributor;
 import isnork.g9.utils.risk.RiskEvaluator;
@@ -27,7 +28,7 @@ public class Diver extends Player implements PlayerPrototype {
 	private int timeElapsed;
 	private Point2D location;
 	
-	private CommPrototype commPrototype;
+	private CommPrototype commPrototype = null;
 	
 	public Diver() {
 		strategy = new Strategy(this);
@@ -79,8 +80,8 @@ public class Diver extends Player implements PlayerPrototype {
 		//TODO use penalty and r for something
 		BoardParams params = new BoardParams(seaLifePossibilites, d, n);
 		
+		GameParams.init(seaLifePossibilites, penalty, d, r, n);
 		commPrototype = new SimpleCommunicator();
-		commPrototype.init(seaLifePossibilites, penalty, d, r, n);
 		
 		allDivers.add(this);
 		
@@ -109,8 +110,8 @@ public class Diver extends Player implements PlayerPrototype {
 		location = myPosition;
 		
 		strategy.setSighting(sighting);
-		return null;
-		//return commPrototype.createMessage(myPosition, whatYouSee, incomingMessages, playerLocations);
+		//return null;
+		return commPrototype.createMessage(myPosition, whatYouSee, incomingMessages, playerLocations);
 	}
 
 	@Override

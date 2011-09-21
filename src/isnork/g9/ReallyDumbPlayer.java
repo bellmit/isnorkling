@@ -7,6 +7,7 @@ package isnork.g9;
 
 import isnork.g9.comm.CommPrototype;
 import isnork.g9.comm.SimpleCommunicator;
+import isnork.g9.utils.GameParams;
 import isnork.sim.GameObject.Direction;
 import isnork.sim.Observation;
 import isnork.sim.Player;
@@ -18,7 +19,7 @@ import java.util.Set;
 
 public class ReallyDumbPlayer extends Player {
 
-	private CommPrototype commPrototype;
+	private CommPrototype commPrototype = new SimpleCommunicator();
 	
 	private Direction[] choices = new Direction[] { Direction.N, Direction.NW, 
 			Direction.W, Direction.SW, Direction.S, 
@@ -34,9 +35,7 @@ public class ReallyDumbPlayer extends Player {
 	@Override
 	public void newGame(Set<SeaLifePrototype> seaLifePossibilites, int penalty,
 			int d, int r, int n) {
-		// TODO Auto-generated method stub
-		commPrototype = new SimpleCommunicator();
-		commPrototype.init(seaLifePossibilites, penalty, d, r, n);
+		GameParams.init(seaLifePossibilites, penalty, d, r, n);
 
 	}
 

@@ -1,12 +1,11 @@
 package isnork.g9.comm;
 
+import isnork.g9.utils.GameParams;
 import isnork.sim.GameObject;
 import isnork.sim.Observation;
-import isnork.sim.SeaLifePrototype;
+import isnork.sim.iSnorkMessage;
 
 import java.awt.geom.Point2D;
-import java.util.Iterator;
-import java.util.Set;
 
 /**
  *  
@@ -29,39 +28,17 @@ import java.util.Set;
 
 public class SimpleEncoding implements Encoding {
 	
-	private static int scalingFactorD;
-	private static int scalingFactorS;
+	private final int scalingFactorD; 
+	private final int scalingFactorS; 
 	private static final int NUM_HAPPINESS_VALUE_BITS_D = 4;
 	private static final int NUM_HAPPINESS_VALUE_BITS_S = 1;
+	private static final int NEG_INFINITY = -9999;
 	
-	private static int maxVal;
-	
-	
-	public static int getMaxVal(){return maxVal;}
-	
-	@Override
-	public void init(Set<SeaLifePrototype> seaLifePossibilites, int penalty,
-			int d, int r, int n){
-		
-		int maxd = -1;
-		int maxs = -1;
-		Iterator<SeaLifePrototype> iter = seaLifePossibilites.iterator();
-		while(iter.hasNext()){
-			SeaLifePrototype seaLifePrototype = iter.next();
-			if(seaLifePrototype.getSpeed()==0 && seaLifePrototype.getHappiness() > maxs)
-				maxs = seaLifePrototype.getHappiness();
-			if(seaLifePrototype.getHappiness() > maxd)
-				maxd = seaLifePrototype.getHappiness();
-
-		}
-		
-		maxVal = maxd > maxs ? maxd : maxs;
-		
-		scalingFactorD = maxd / (1 << NUM_HAPPINESS_VALUE_BITS_D);
-		if (scalingFactorD==0) { scalingFactorD = 1; }
-		scalingFactorS = maxd / (1 << NUM_HAPPINESS_VALUE_BITS_S);
-		if (scalingFactorS==0) { scalingFactorS = 1; }
-		
+	public SimpleEncoding(){
+		int _scalingFactorD = GameParams.getDynamicHVT() / (1 << NUM_HAPPINESS_VALUE_BITS_D);
+		int _scalingFactorS = GameParams.getStaticHVT() / (1 << NUM_HAPPINESS_VALUE_BITS_S);
+		scalingFactorD = _scalingFactorD == 0 ? 1 : _scalingFactorD;
+		scalingFactorS = _scalingFactorS == 0 ? 1 : _scalingFactorS;
 	}
 	
 	@Override
@@ -108,22 +85,30 @@ public class SimpleEncoding implements Encoding {
 	}
 
 	@Override
-	public Message decode(String str) {
+	public Message decode(iSnorkMessage iMsg) {
 		
-		SimpleMessage msg = new SimpleMessage();
+		String str = iMsg.getMsg();
+		SimpleMessage sMsg = new SimpleMessage(iMsg);
+		
+		if(str==null){
+			System.out.println("COMM ERROR: Received null incoming message");
+			sMsg.setEstimatedValue(NEG_INFINITY);
+			return sMsg;
+		}
+		
+		
 		int rawMsg = (int)str.charAt(0);
-		msg.setRawMsg(str);
 		
 		boolean isDynamic = (rawMsg & (1<<4)) == 0;
-		msg.setDynamic(isDynamic);
+		sMsg.setDynamic(isDynamic);
 		
 		if(isDynamic){
-			msg.setEstValue(rawMsg*scalingFactorD);
+			sMsg.setEstimatedValue(rawMsg*scalingFactorD);
 		}
 		else{
-			msg.setEstValue((rawMsg & 1)*scalingFactorS);
+			sMsg.setEstimatedValue((rawMsg & 1)*scalingFactorS);
 		}
 		
-		return msg;
+		return sMsg;
 	}
 }
