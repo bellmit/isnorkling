@@ -49,7 +49,13 @@ public class GlobalCircleStrategy implements StrategyPrototype {
 		double minDelta = 10000;
 		double currDelta = 0;
 		for (Direction dir : possDirs) {
-			directDist = calcDistFromOrigin(calcLocFromOffset(currentLoc,dir));
+			try {
+				directDist = calcDistFromOrigin(calcLocFromOffset(currentLoc,
+						dir));
+			} catch (NullPointerException e) {
+				e.printStackTrace();
+				// TODO: handle exception
+			}
 			currDelta = Math.abs(directDist - diver.getDesiredRadius());
 			if (currDelta < minDelta) {
 				minDelta = currDelta;
@@ -66,7 +72,11 @@ public class GlobalCircleStrategy implements StrategyPrototype {
 
 	// Returns a new location, given a starting location and a direction.
 	private Point2D calcLocFromOffset(Point2D loc, Direction dir) {
-		return new Point2D.Double( loc.getX() + dir.getDx(), loc.getY() + dir.getDy() );
+		try {
+			return new Point2D.Double( loc.getX() + dir.getDx(), loc.getY() + dir.getDy() );
+		} catch (NullPointerException e) { // Occurs after STAYPUT
+			return new Point2D.Double( loc.getX(), loc.getY());
+		}
 	}
 
 	@Override
