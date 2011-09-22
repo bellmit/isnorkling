@@ -10,9 +10,12 @@ public class GameParams {
 	
 	public synchronized static void init(Set<SeaLifePrototype> seaLifePossibilites, int penalty,
 				int d, int r, int n){
-		if(_instance == null){
+		// BUG FIX: I'm not sure what purpose this if-stmt served, but a side effect is that
+		// the game params are not updated with each new game.
+		// Chris
+		//if(_instance == null){
 			_instance = new _GameParams(seaLifePossibilites, penalty, d, r, n);
-		}
+		//}
 	}
 	
 	
