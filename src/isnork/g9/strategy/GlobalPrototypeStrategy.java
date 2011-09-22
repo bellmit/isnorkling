@@ -1,3 +1,6 @@
+
+
+
 package isnork.g9.strategy;
 
 import isnork.g9.PlayerPrototype;
@@ -10,6 +13,11 @@ import java.util.ArrayList;
 import java.util.Random;
 import java.util.Set;
 
+/**
+ * DEPRECATED !!!
+ * @author sandeep
+ *
+ */
 public class GlobalPrototypeStrategy implements StrategyPrototype {
 
 	int currentTimeElapsed = 0;
