@@ -31,13 +31,16 @@ public class Diver extends Player implements PlayerPrototype {
 	private int desiredRadius;
 	private Direction lastDirection;
 	
-	
-	
 	private CommPrototype commPrototype = null;
 	
 	public Diver() {
 		strategy = new Strategy(this);
 		timeElapsed = 0;
+		
+		ArrayList<Direction> dirs = Direction.allBut(Direction.STAYPUT);
+		dirs.add(Direction.E);
+		
+		lastDirection = dirs.get((int)(Math.random()*8));
 	}
 	
 	@Override
@@ -120,6 +123,7 @@ public class Diver extends Player implements PlayerPrototype {
 			ArrayList<Integer> numDiversPerCircle = new ArrayList<Integer>();
 			for (int i=0; i < numberOfCircles; i++) {
 				circleRadius = visibilityRadius * (1 + 2 * numberOfCircles);
+				radii.add(circleRadius);
 				numDivers = (int) Math.floor( 2 * Math.PI * circleRadius / averageDistance );
 				numDiversPerCircle.add(numDivers);			
 				}

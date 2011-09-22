@@ -30,6 +30,7 @@ public class GlobalCircleStrategy implements StrategyPrototype {
 	public Direction getDirection() {
 		Direction lastDir, nextDir, prevDir, nextNextDir, prevPrevDir;
 		Point2D currentLoc = diver.getLocation();
+		
 		lastDir = diver.getLastDirection();
 		nextDir = DirectionUtil.getNextDirection(lastDir);
 		nextNextDir = DirectionUtil.getNextDirection(nextDir);
