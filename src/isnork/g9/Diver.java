@@ -95,7 +95,11 @@ public class Diver extends Player implements PlayerPrototype {
 		commPrototype.init();
 		
 		allDivers.add(this);
-		
+		// Bug fix: allDivers was not being cleared between games
+		if (allDivers.size() > n) {
+			allDivers.clear();
+			allDivers.add(this);
+		}
 		if (allDivers.size() == n) {
 			RiskDistributor rd = new RiskDistributor();
 			RiskEvaluator re = new RiskEvaluator();
@@ -110,39 +114,42 @@ public class Diver extends Player implements PlayerPrototype {
 			int boardRadius=GameParams.getGridSize();
 			int numberOfDivers=GameParams.getNumDivers();
 			int visibilityRadius=GameParams.getVisibilityRadius();
-			int numberOfCircles = (int) Math.ceil((boardRadius- 2*visibilityRadius)/visibilityRadius);
-			int tempVariable=0;
+			int numberOfCircles = (int) Math.floor((boardRadius / ( 2 * visibilityRadius )));
+			int num = 0;
 			for( int i=0; i< numberOfCircles; i++){
-				tempVariable =tempVariable + i;
+				num += (1 + 2*i);
 			}
-			int totalDistance = (int) (numberOfCircles + 4*Math.PI*visibilityRadius*tempVariable);
-			int averageDistance = (int) totalDistance /numberOfDivers;
-
-			int circleRadius, numDivers;
+			double totalDistance = (visibilityRadius * num);
+			double averageDistance =  totalDistance / numberOfDivers;
+			
+			int circleRadius, numDivers = 0;
 			ArrayList<Integer> radii = new ArrayList<Integer>();
 			ArrayList<Integer> numDiversPerCircle = new ArrayList<Integer>();
+			int diversAdded = 0;
 			for (int i=0; i < numberOfCircles; i++) {
-				circleRadius = visibilityRadius * (1 + 2 * numberOfCircles);
+				circleRadius = visibilityRadius * ( 1 + 2*i);
 				radii.add(circleRadius);
-				numDivers = (int) Math.floor( 2 * Math.PI * circleRadius / averageDistance );
-				numDiversPerCircle.add(numDivers);			
+				numDivers = (int) Math.floor( circleRadius / averageDistance );
+				diversAdded += numDivers;
+				numDiversPerCircle.add(numDivers);		
+				
 				}
+			int diff = numberOfDivers - diversAdded;
+			int outerCircle = numberOfCircles - 1;
+			numDiversPerCircle.set(outerCircle, numDiversPerCircle.get(outerCircle) + diff );
 			
-			int diversRemaining = 0;
 			int i = 0;
+			int diversAtRadius = 0;
 			// Distribute desired radii across all divers 
 			for ( Diver diver : allDivers ) {
-				diversRemaining = numDiversPerCircle.get(i);
-				if (diversRemaining > 0) {
-					diversRemaining--;
-					numDiversPerCircle.set(i, diversRemaining);
-					diver.setDesiredRadius(radii.get(i));
-				} else if (diversRemaining == 0) {
+				if (diversAtRadius == numDiversPerCircle.get(i)) {
 					i++;
+					diversAtRadius = 0;
 				}
-				
+				diversAtRadius++;		
+				diver.setDesiredRadius(radii.get(i));
 			}
-			
+			System.out.println();
 		}
 	}
 

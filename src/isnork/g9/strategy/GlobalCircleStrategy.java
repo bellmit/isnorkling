@@ -18,7 +18,6 @@ public class GlobalCircleStrategy implements StrategyPrototype {
 
 	@Override
 	public void setBoardParams(BoardParams b) {
-		// TODO Auto-generated method stub
 
 	}
 
@@ -72,31 +71,26 @@ public class GlobalCircleStrategy implements StrategyPrototype {
 
 	@Override
 	public void setLocation(Point2D loc) {
-		// TODO Auto-generated method stub
 	}
 
 	@Override
 	public void setPlayer(PlayerPrototype p) {
-		// TODO Auto-generated method stub
 		this.diver = (Diver) p;
 
 	}
 
 	@Override
 	public void setOverallStrategy(Strategy s) {
-		// TODO Auto-generated method stub
 
 	}
 
 	@Override
 	public double getConfidence() {
-		// TODO Auto-generated method stub
 		return 1;
 	}
 
 	@Override
 	public void setSighting(Set<Observation> s) {
-		// TODO Auto-generated method stub
 
 	}
 
