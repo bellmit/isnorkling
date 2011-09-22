@@ -73,8 +73,8 @@ public class Strategy {
 		
 		System.out.println(riskAvoidance.getConfidence());
 		
-		double baseRiskConfidence = 0.5;
-		int startConsideringReturn = 120;
+		double baseRiskConfidence = 0.3;
+		int startConsideringReturn = 60;
 		
 		if (player.getTimeElapsed() > ALL_TIME - startConsideringReturn) {
 			int tn = player.getTimeElapsed() - (ALL_TIME - startConsideringReturn);
@@ -88,7 +88,7 @@ public class Strategy {
 		global.setLocation(player.getLocation());
 		
 		//In the beginning, try to spread out
-		if (player.getTimeElapsed() < 60) {
+		if (player.getTimeElapsed() < 40) {
 			return global.getDirection();
 		//TODO don't hardcode this
 		} else if (player.getTimeElapsed() > ALL_TIME - startConsideringReturn) {
@@ -97,11 +97,11 @@ public class Strategy {
 			
 			Suggestion suggest = player.getComm().getDirection(player.getLocation());
 			
-			if (suggest.getConfidence() > 0.2 && Math.random() > 0.15) {
+			if (suggest.getConfidence() > 0.2) {
 				Direction dir = suggest.getDir();
 				return dir;
 			} else {
-				return random.getDirection();
+				return global.getDirection();
 			}
 		}
 		

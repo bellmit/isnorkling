@@ -39,15 +39,15 @@ public class IncomingMessageQueue {
 		
 		
 		
-		System.out.println("Comm Dest: "+dest);
-		System.out.println("Received Estimated value: "+ currentDest.getEstimatedValue());
+		//System.out.println("Comm Dest: "+dest);
+		//System.out.println("Received Estimated value: "+ currentDest.getEstimatedValue());
 		//Simulator id screwed up. The Y axis is flipped
 		double thetaRad = Math.atan2(myPosition.getY()-dest.getY(), dest.getX()-myPosition.getX());
 		double thetaDeg = thetaRad * 180 / Math.PI;
 		if(thetaDeg < 0 ) thetaDeg += 360;
 		int dirChoice = ((int)thetaDeg)/45 + ( ((int) thetaDeg)%45 < 23 ? 0 : 1);
-		System.out.println("My location: "+ myPosition);
-		System.out.println("Comm Direction : "+choices[dirChoice]);
+		//System.out.println("My location: "+ myPosition);
+		//System.out.println("Comm Direction : "+choices[dirChoice]);
 		
 		return new Suggestion(choices[dirChoice],currentDest.getEstimatedValue());
 		
@@ -65,7 +65,7 @@ public class IncomingMessageQueue {
 			double val = evaluator.evaluate(myPosition, memory, msg);
 			msg.setEstimatedValue(val);
 			if(val > 0 && val < 1){
-				System.out.println("Loading Estimate: "+msg.getEstimatedValue());
+				//System.out.println("Loading Estimate: "+msg.getEstimatedValue());
 				msgHeap.add(msg);
 			}
 			

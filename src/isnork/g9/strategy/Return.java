@@ -26,14 +26,19 @@ public class Return implements StrategyPrototype {
 			return Direction.STAYPUT;
 		}
 		
+		Direction bestDir = null;
+		double maxGain = 0;
+		
 		for (Direction d : dirs) {
 			Point2D newloc = new Point2D.Double(cur.getX() + d.dx, cur.getY() + d.dy);
 			
-			if (home.distance(newloc) < home.distance(cur)) 
-				return d;
+			if (home.distance(newloc) < home.distance(cur) && (home.distance(cur) - home.distance(newloc) > maxGain )) {
+				maxGain = home.distance(cur) - home.distance(newloc);
+				bestDir = d;
+			}	
 		}
 		
-		return Direction.STAYPUT;
+		return bestDir;
 	}
 
 	@Override
@@ -56,7 +61,7 @@ public class Return implements StrategyPrototype {
 	@Override
 	public double getConfidence() {
 		// TODO Auto-generated method stub
-		return 0;
+		return 1;
 	}
 
 	@Override

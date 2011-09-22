@@ -72,6 +72,7 @@ public class RiskAvoidance implements StrategyPrototype {
 			double danger = weightedDanger(nextSighting, newLoc);
 			
 			if (danger < minDanger) {
+				System.out.println("  risk: " + danger);
 				minDanger = danger;
 				curDir = d;
 			}
@@ -114,7 +115,7 @@ public class RiskAvoidance implements StrategyPrototype {
 				double badFactor = 0.79;
 				double goodFactor = 0.03;
 				
-				double temp = ob.happiness*2 / Math.pow(distance, 2);
+				double temp = ob.happiness*2 * (1 - (distance - 1.5) * 0.2);
 				
 				double dy = ob.direction.dy;
 				double dx = ob.direction.dx;
