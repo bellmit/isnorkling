@@ -2,6 +2,7 @@ package isnork.g9.strategy;
 
 import isnork.g9.PlayerPrototype;
 import isnork.g9.comm.Suggestion;
+import isnork.g9.utils.BoardParams;
 import isnork.g9.utils.risk.IndividualRiskProfile;
 import isnork.sim.GameObject.Direction;
 import isnork.sim.Observation;
@@ -18,6 +19,8 @@ public class Strategy {
 	
 	private IndividualRiskProfile risk;
 	private PlayerPrototype player;
+	
+	private static final int ALL_TIME = 480;
 	
 	private StrategyPrototype global;
 	private StrategyPrototype riskAvoidance;
@@ -38,6 +41,10 @@ public class Strategy {
 		returning.setPlayer(p);
 		
 		random = new RandomWalk();
+	}
+	
+	public void setBoardParams(BoardParams b) {
+		riskAvoidance.setBoardParams(b);
 	}
 	
 	public void setRisk(IndividualRiskProfile r) {
@@ -62,8 +69,20 @@ public class Strategy {
 	//stub
 	public Direction getDirection() {
 		
-		if (riskAvoidance.getConfidence() > 0.5) {
-			return riskAvoidance.getDirection();
+		Direction escape = riskAvoidance.getDirection();
+		
+		System.out.println(riskAvoidance.getConfidence());
+		
+		double baseRiskConfidence = 0.5;
+		int startConsideringReturn = 120;
+		
+		if (player.getTimeElapsed() > ALL_TIME - startConsideringReturn) {
+			int tn = player.getTimeElapsed() - (ALL_TIME - startConsideringReturn);
+			baseRiskConfidence = Math.pow((tn-30) / 30.0, 2.0);
+		}
+		
+		if (riskAvoidance.getConfidence() > baseRiskConfidence) {
+			return escape;
 		}
 		
 		global.setLocation(player.getLocation());
@@ -72,13 +91,13 @@ public class Strategy {
 		if (player.getTimeElapsed() < 60) {
 			return global.getDirection();
 		//TODO don't hardcode this
-		} else if (player.getTimeElapsed() > 350) {
+		} else if (player.getTimeElapsed() > ALL_TIME - startConsideringReturn) {
 			return returning.getDirection();
 		} else {
 			
 			Suggestion suggest = player.getComm().getDirection(player.getLocation());
 			
-			if (suggest.getConfidence() > 0.2) {
+			if (suggest.getConfidence() > 0.2 && Math.random() > 0.15) {
 				Direction dir = suggest.getDir();
 				return dir;
 			} else {
