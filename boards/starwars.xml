@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<java version="1.6.0_22" class="java.beans.XMLDecoder">
+ <object class="isnork.sim.SeaLifePrototype">
+  <void property="filename">
+   <string>r2d2.png</string>
+  </void>
+  <void property="happiness">
+   <int>400</int>
+  </void>
+  <void property="maxCount">
+   <int>1</int>
+  </void>
+  <void property="minCount">
+   <int>1</int>
+  </void>
+  <void property="name">
+   <string>R2-D2</string>
+  </void>
+  <void property="speed">
+   <int>1</int>
+  </void>
+ </object>
+ <object class="isnork.sim.SeaLifePrototype">
+  <void property="dangerous">
+   <boolean>true</boolean>
+  </void>
+  <void property="filename">
+   <string>storm.png</string>
+  </void>
+  <void property="happiness">
+   <int>50</int>
+  </void>
+  <void property="maxCount">
+   <int>10</int>
+  </void>
+  <void property="minCount">
+   <int>10</int>
+  </void>
+  <void property="name">
+   <string>Storm Trooper</string>
+  </void>
+  <void property="speed">
+   <int>1</int>
+  </void>
+ </object>
+ <object class="isnork.sim.SeaLifePrototype">
+  <void property="dangerous">
+   <boolean>true</boolean>
+  </void>
+  <void property="filename">
+   <string>vader.png</string>
+  </void>
+  <void property="happiness">
+   <int>1000</int>
+  </void>
+  <void property="maxCount">
+   <int>1</int>
+  </void>
+  <void property="minCount">
+   <int>1</int>
+  </void>
+  <void property="name">
+   <string>Darth Vader</string>
+  </void>
+  <void property="speed">
+   <int>1</int>
+  </void>
+ </object>
+ <object class="isnork.sim.SeaLifePrototype">
+  <void property="filename">
+   <string>jedi.png</string>
+  </void>
+  <void property="happiness">
+   <int>200</int>
+  </void>
+  <void property="maxCount">
+   <int>5</int>
+  </void>
+  <void property="minCount">
+   <int>5</int>
+  </void>
+  <void property="name">
+   <string>Jedi Knight</string>
+  </void>
+  <void property="speed">
+   <int>1</int>
+  </void>
+ </object>
+</java>
