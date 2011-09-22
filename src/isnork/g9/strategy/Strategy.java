@@ -70,44 +70,45 @@ public class Strategy {
 	//stub
 	public Direction getDirection() {
 		
-//		Direction escape = riskAvoidance.getDirection();
-//		
-//		System.out.println(riskAvoidance.getConfidence());
-//		
-//		double baseRiskConfidence = 0.3;
-//		int startConsideringReturn = 60;
-//		
-//		if (player.getTimeElapsed() > ALL_TIME - startConsideringReturn) {
-//			int tn = player.getTimeElapsed() - (ALL_TIME - startConsideringReturn);
-//			baseRiskConfidence = Math.pow((tn-30) / 30.0, 2.0);
-//		}
-//		
-//		if (riskAvoidance.getConfidence() > baseRiskConfidence) {
-//			return escape;
-//		}
-//		
-//		global.setLocation(player.getLocation());
-//		
-//		//In the beginning, try to spread out
-//		if (player.getTimeElapsed() < 40) {
-//			return global.getDirection();
-//		//TODO don't hardcode this
-//		} else if (player.getTimeElapsed() > ALL_TIME - startConsideringReturn) {
-//			return returning.getDirection();
-//		} else {
-//			
-//			Suggestion suggest = player.getComm().getDirection(player.getLocation());
-//			
-//			if (suggest.getConfidence() > 0.2) {
-//				Direction dir = suggest.getDir();
-//				return dir;
-//			} else {
-//				return global.getDirection();
-//			}
-//		}
+		Direction chosenDirection = null;
+		
+		Direction escape = riskAvoidance.getDirection();
+		
+		System.out.println(riskAvoidance.getConfidence());
+		
+		double baseRiskConfidence = 0.3;
+		int startConsideringReturn = 60;
+		
+		if (player.getTimeElapsed() > ALL_TIME - startConsideringReturn) {
+			int tn = player.getTimeElapsed() - (ALL_TIME - startConsideringReturn);
+			baseRiskConfidence = Math.pow((tn-30) / 30.0, 2.0);
+		}
+		
+		if (riskAvoidance.getConfidence() > baseRiskConfidence) {
+			chosenDirection = escape;
+		}
+		
+		global.setLocation(player.getLocation());
+		
+		//In the beginning, try to spread out
+		if (player.getTimeElapsed() < 40) {
+			chosenDirection = global.getDirection();
+		//TODO don't hardcode this
+		} else if (player.getTimeElapsed() > ALL_TIME - startConsideringReturn) {
+			chosenDirection = returning.getDirection();
+		} else {
+			
+			Suggestion suggest = player.getComm().getDirection(player.getLocation());
+			
+			if (suggest.getConfidence() > 0.2) {
+				Direction dir = suggest.getDir();
+				chosenDirection = dir;
+			} else {
+				chosenDirection = global.getDirection();
+			}
+		}
 		Diver diver = (Diver) player;
-		Direction lastDirection = global.getDirection();
-		diver.setLastDirection(lastDirection);
-		return lastDirection;
+		diver.setLastDirection(chosenDirection);
+		return chosenDirection;
 	}
 }
