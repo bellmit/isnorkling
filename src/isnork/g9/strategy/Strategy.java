@@ -86,6 +86,7 @@ public class Strategy {
 		
 		if (riskAvoidance.getConfidence() > baseRiskConfidence) {
 			chosenDirection = escape;
+			return escape;
 		}
 		
 		global.setLocation(player.getLocation());

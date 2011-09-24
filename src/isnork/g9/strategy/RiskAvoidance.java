@@ -2,6 +2,7 @@ package isnork.g9.strategy;
 
 import isnork.g9.PlayerPrototype;
 import isnork.g9.utils.BoardParams;
+import isnork.g9.utils.Parameter;
 import isnork.g9.utils.risk.IndividualRiskProfile;
 import isnork.sim.Observation;
 import isnork.sim.GameObject.Direction;
@@ -115,7 +116,7 @@ public class RiskAvoidance implements StrategyPrototype {
 				double badFactor = 0.79;
 				double goodFactor = 0.03;
 				
-				double temp = ob.happiness*2 * (1 - (distance - 1.5) * 0.2);
+				double temp = ob.happiness*2 * (1 - (distance - 1.5) * Parameter.DANGER_ESTIMATION_DROPPING_FACTOR);
 				
 				double dy = ob.direction.dy;
 				double dx = ob.direction.dx;
