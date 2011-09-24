@@ -4,17 +4,22 @@ import isnork.g9.Diver;
 import isnork.g9.PlayerPrototype;
 import isnork.g9.utils.BoardParams;
 import isnork.g9.utils.DirectionUtil;
+import isnork.g9.utils.Parameter;
 import isnork.sim.Observation;
 import isnork.sim.GameObject.Direction;
 
 
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
+import java.util.Random;
 import java.util.Set;
 
 public class GlobalCircleStrategy implements StrategyPrototype {
 	
 	Diver diver;
+	Point2D location;
+	private Random rand = new Random(); // For testing
+
 
 	@Override
 	public void setBoardParams(BoardParams b) {
@@ -28,7 +33,6 @@ public class GlobalCircleStrategy implements StrategyPrototype {
 	@Override
 	public Direction getDirection() {
 		Direction lastDir, nextDir, prevDir, nextNextDir, prevPrevDir;
-		Point2D currentLoc = diver.getLocation();
 		
 		lastDir = diver.getLastDirection();
 		nextDir = DirectionUtil.getNextDirection(lastDir);
@@ -50,7 +54,7 @@ public class GlobalCircleStrategy implements StrategyPrototype {
 		double currDelta = 0;
 		for (Direction dir : possDirs) {
 			try {
-				directDist = calcDistFromOrigin(calcLocFromOffset(currentLoc,
+				directDist = calcDistFromOrigin(calcLocFromOffset(location,
 						dir));
 			} catch (NullPointerException e) {
 				e.printStackTrace();
@@ -61,6 +65,20 @@ public class GlobalCircleStrategy implements StrategyPrototype {
 				minDelta = currDelta;
 				bestDir = dir;
 			}
+		}
+		// Randomly perturb 20% of the time
+		double prob = rand.nextDouble();
+		if (prob <= Parameter.GLOBAL_CIRCLE_STRATEGY_PERTURBATION_LIKELIHOOD) {
+			int rint = rand.nextInt(Parameter.GLOBAL_CIRCLE_STRATEGY_MAX_PERTURBATION_DISTANCE);
+			if (rand.nextDouble() > 0.5) {
+				rint *= -1;
+			}
+			int newDirectionIndex = rint + DirectionUtil.getIndexFromDirection(bestDir);
+			newDirectionIndex = newDirectionIndex %= 7;
+			if (newDirectionIndex < 0) {
+				newDirectionIndex += 8;
+			}
+			bestDir = DirectionUtil.getDirectionFromIndex(newDirectionIndex);
 		}
 		return bestDir;
 	}
@@ -81,6 +99,7 @@ public class GlobalCircleStrategy implements StrategyPrototype {
 
 	@Override
 	public void setLocation(Point2D loc) {
+		this.location = loc;
 	}
 
 	@Override
@@ -96,7 +115,7 @@ public class GlobalCircleStrategy implements StrategyPrototype {
 
 	@Override
 	public double getConfidence() {
-		return 1;
+		return Parameter.GLOBAL_CIRCLE_STRATEGY_CONFIDENCE;
 	}
 
 	@Override

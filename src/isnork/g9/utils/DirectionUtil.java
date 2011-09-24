@@ -36,5 +36,13 @@ public class DirectionUtil {
 		}
 		return outD;
 	}
+	
+	public static Direction getDirectionFromIndex(int index) {
+		return allDirections.get(index);
+	}
+	
+	public static int getIndexFromDirection(Direction dir) {
+		return allDirections.indexOf(dir);
+	}
 
 }
