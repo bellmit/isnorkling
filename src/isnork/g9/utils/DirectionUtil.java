@@ -1,8 +1,9 @@
 package isnork.g9.utils;
 
-import java.util.ArrayList;
-
 import isnork.sim.GameObject.Direction;
+
+import java.awt.geom.Point2D;
+import java.util.ArrayList;
 
 public class DirectionUtil {
 	private static ArrayList<Direction> allDirections = Direction.allBut(null);
@@ -35,6 +36,14 @@ public class DirectionUtil {
 			}
 		}
 		return outD;
+	}
+	
+	public static int getRelativeOctant(Point2D myPos, Point2D target){
+		//Simulator id screwed up. The Y axis is flipped
+		double thetaRad = Math.atan2(myPos.getY()-target.getY(), target.getX()-myPos.getX());
+		double thetaDeg = thetaRad * 180 / Math.PI;
+		if(thetaDeg < 0 ) thetaDeg += 360;
+		return ((int)thetaDeg)/45 + ( ((int) thetaDeg)%45 < 23 ? 0 : 1);
 	}
 
 }

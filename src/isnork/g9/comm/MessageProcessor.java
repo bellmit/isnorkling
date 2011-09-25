@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.PriorityQueue;
 import java.util.Set;
 
-public class IncomingMessageQueue {
+public class MessageProcessor {
 	
 	private int ticker = 0;
 	private Message currentDest = null;

@@ -12,7 +12,7 @@ public class SimpleCommunicator implements CommPrototype {
 	
 	protected RecentlyCommunicatedSightings recentSightings = new RecentlyCommunicatedSightings();
 	protected Encoding encoding = new SimpleEncoding();
-	protected IncomingMessageQueue queuedMessages = new IncomingMessageQueue();
+	protected MessageProcessor queuedMessages = new MessageProcessor();
 	protected ObservationMemory memory = new ObservationMemory<Observation, SeaLifePrototype>();
 
 	@Override
@@ -42,7 +42,7 @@ public class SimpleCommunicator implements CommPrototype {
 	private void processIncoming(Point2D myPosition,
 			Set<Observation> whatYouSee, Set<iSnorkMessage> incomingMessages,
 			Set<Observation> playerLocations) {
-		memory.processObservations(whatYouSee);
+		memory.processObservations(myPosition, whatYouSee);
 		queuedMessages.load(myPosition, whatYouSee,  incomingMessages, playerLocations,
 				memory, encoding);
 		

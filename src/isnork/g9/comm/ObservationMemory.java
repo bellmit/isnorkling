@@ -10,31 +10,19 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-public class ObservationMemory<K extends Observation, T extends SeaLifePrototype> {
+public class ObservationMemory<K extends Observation> {
 	
-	private Map<Integer, K> creatureMemory = new HashMap<Integer, K>();
-	private Map<String, T> speciesMemory = new HashMap<String, T>();
-	private Set<T> unseenSpecies = new HashSet<T>();
+	private Set<Integer> creatureMemory = new HashSet<Integer>();
+	private Map<String, SpeciesMemUnit> speciesMemory = new HashMap<String, SpeciesMemUnit>();
 	private Set<Point2D> locationMemory = new HashSet<Point2D>();
 	
-	public void init(final Set<T> seaCreatures){
-		unseenSpecies.addAll(seaCreatures);
-	}
-	
-	public void addCreatureToMemory(K creature){
-		creatureMemory.put(creature.getId(), creature);
-	}
-	
-	public void addSpeciesToMemory(T species){
-		if(!unseenSpecies.contains(species)){
-			speciesMemory.put(species.getName(), species);
+	public void init(final Set<SeaLifePrototype> seaCreatures){
+		int i=0;
+		for(SeaLifePrototype slp : seaCreatures){
+			speciesMemory.put(slp.getName(), new SpeciesMemUnit(slp, i++));
 		}
-		
 	}
 	
-	public void addLocationToMemory(Point2D myLoc){
-		locationMemory.add(myLoc);
-	}
 	
 	public double closestDistanceToLocation(Point2D location){
 		double minDistance = GameParams.getGridSize() * 2 * 1.5 +1;
@@ -47,10 +35,12 @@ public class ObservationMemory<K extends Observation, T extends SeaLifePrototype
 		return minDistance;
 	}
 
-	public void processObservations(Set<Observation> whatYouSee) {
+	public void processObservations(Point2D myPosition, Set<Observation> whatYouSee) {
 	
+		locationMemory.add(myPosition);
 		for(Observation obs : whatYouSee){
-			
+			speciesMemory.get(obs.getName()).incrementFrequency();
+			creatureMemory.add(obs.getId());
 		}
 		
 	}

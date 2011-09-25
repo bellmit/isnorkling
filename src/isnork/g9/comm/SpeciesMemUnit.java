@@ -2,22 +2,31 @@ package isnork.g9.comm;
 
 import isnork.sim.SeaLifePrototype;
 
-public class SpeciesMemUnit extends SeaLifePrototype {
+public class SpeciesMemUnit{
 	
 	private int frequency = 0;
+	private int id = 0;
+	private SeaLifePrototype slp = null;
 	
-	public SpeciesMemUnit(SeaLifePrototype slp) {
-		
-	}
-
 	public int getFrequency(){
 		return frequency;
 	}
 	
-	public Object clone(){
-		SpeciesMemUnit spm = new SpeciesMemUnit((SeaLifePrototype)super.clone());
-		spm.frequency = frequency;
-		return spm;
+	public SpeciesMemUnit(SeaLifePrototype slp, int id){
+		this.slp = slp;
+		this.id = id;
+	}
+	
+	public void incrementFrequency(){
+		frequency++;
+	}
+	
+	public int getId(){
+		return id;
+	}
+
+	public SeaLifePrototype getSlp() {
+		return slp;
 	}
 
 }
