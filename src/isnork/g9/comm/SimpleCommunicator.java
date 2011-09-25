@@ -13,7 +13,7 @@ public class SimpleCommunicator implements CommPrototype {
 	protected RecentlyCommunicatedSightings recentSightings = new RecentlyCommunicatedSightings();
 	protected Encoding encoding = new SimpleEncoding();
 	protected MessageProcessor queuedMessages = new MessageProcessor();
-	protected ObservationMemory memory = new ObservationMemory<Observation, SeaLifePrototype>();
+	protected ObservationMemory memory = new ObservationMemory<Observation>();
 
 	@Override
 	public String createMessage(Point2D myPosition,

@@ -2,32 +2,34 @@ package isnork.g9.strategy;
 
 import isnork.g9.Diver;
 import isnork.g9.PlayerPrototype;
+//import isnork.g9.comm.Suggestion;
 import isnork.g9.comm.Suggestion;
 import isnork.g9.utils.BoardParams;
+import isnork.g9.utils.Parameter;
 import isnork.g9.utils.risk.IndividualRiskProfile;
 import isnork.sim.GameObject.Direction;
 import isnork.sim.Observation;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
 /**
  * this is the overall strategy
  * @author yufeiliu
- *
+ * @refactorer chrishaueter
  */
 public class Strategy {
 	
 	private IndividualRiskProfile risk;
 	private PlayerPrototype player;
-	
-	private static final int ALL_TIME = 480;
-	
+		
 	private StrategyPrototype global;
 	private StrategyPrototype riskAvoidance;
 	private StrategyPrototype returning;
 	
-	private StrategyPrototype random;
+	//private StrategyPrototype random;
+	
 	
 	public Strategy(PlayerPrototype p) {
 		player = p;
@@ -41,7 +43,6 @@ public class Strategy {
 		returning = new Return();
 		returning.setPlayer(p);
 		
-		random = new RandomWalk();
 	}
 	
 	public void setBoardParams(BoardParams b) {
@@ -67,49 +68,42 @@ public class Strategy {
 		riskAvoidance.setSighting(dangerous);
 	}
 	
-	//stub
+	// Utility Function :)
 	public Direction getDirection() {
+					
+		ArrayList<Direction> possDirs = new ArrayList<Direction>();
+		ArrayList<Double> confs = new ArrayList<Double>();
 		
-		Direction chosenDirection = null;
+		// Risk avoidance
+		possDirs.add(riskAvoidance.getDirection());
+		confs.add(riskAvoidance.getConfidence() * Parameter.ESCAPE_CONFIDENCE_COEFFICIENT);
 		
-		Direction escape = riskAvoidance.getDirection();
-		
-		System.out.println(riskAvoidance.getConfidence());
-		
-		double baseRiskConfidence = 0.3;
-		int startConsideringReturn = 60;
-		
-		if (player.getTimeElapsed() > ALL_TIME - startConsideringReturn) {
-			int tn = player.getTimeElapsed() - (ALL_TIME - startConsideringReturn);
-			baseRiskConfidence = Math.pow((tn-30) / 30.0, 2.0);
-		}
-		
-		if (riskAvoidance.getConfidence() > baseRiskConfidence) {
-			chosenDirection = escape;
-			return escape;
-		}
-		
+		// Global strategy
 		global.setLocation(player.getLocation());
+		possDirs.add(global.getDirection());
+		confs.add(Parameter.GLOBAL_CIRCLE_STRATEGY_CONFIDENCE * 
+					Parameter.GLOBAL_STRATEGY_CONFIDENCE_COEFFICIENT);
 		
-		//In the beginning, try to spread out
-		if (player.getTimeElapsed() < 40) {
-			chosenDirection = global.getDirection();
-		//TODO don't hardcode this
-		} else if (player.getTimeElapsed() > ALL_TIME - startConsideringReturn) {
-			chosenDirection = returning.getDirection();
-		} else {
-			
-			Suggestion suggest = player.getComm().getDirection(player.getLocation());
-			
-			if (suggest.getConfidence() > 0.2) {
-				Direction dir = suggest.getDir();
-				chosenDirection = dir;
-			} else {
-				chosenDirection = global.getDirection();
+		// Returning
+		possDirs.add(returning.getDirection());
+		confs.add(returning.getConfidence() * Parameter.RETURNING_CONFIDENCE_COEFFICIENT);
+		
+		// Communication
+		Suggestion sug = player.getComm().getDirection(player.getLocation());
+		possDirs.add(sug.getDir());
+		confs.add(sug.getConfidence() * Parameter.COMMUNICATION_CONFIDENCE_COEFFICIENT);
+		
+		// Choose the most confident direction
+		Direction bestDir = null;
+		double highestConf = 0;
+		for (int i=0; i<4; i++) {
+			if (confs.get(i) > highestConf) {
+				bestDir = possDirs.get(i);
+				highestConf = confs.get(i);
 			}
 		}
 		Diver diver = (Diver) player;
-		diver.setLastDirection(chosenDirection);
-		return chosenDirection;
+		diver.setLastDirection(bestDir);
+		return bestDir;
 	}
 }

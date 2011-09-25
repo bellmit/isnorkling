@@ -46,4 +46,12 @@ public class DirectionUtil {
 		return ((int)thetaDeg)/45 + ( ((int) thetaDeg)%45 < 23 ? 0 : 1);
 	}
 
+	public static Direction getDirectionFromIndex(int index) {
+		return allDirections.get(index);
+	}
+	
+	public static int getIndexFromDirection(Direction dir) {
+		return allDirections.indexOf(dir);
+	}
+
 }
