@@ -6,6 +6,7 @@ import java.util.Set;
 
 import isnork.g9.PlayerPrototype;
 import isnork.g9.utils.BoardParams;
+import isnork.g9.utils.Parameter;
 import isnork.sim.GameObject.Direction;
 import isnork.sim.Observation;
 
@@ -60,8 +61,15 @@ public class Return implements StrategyPrototype {
 
 	@Override
 	public double getConfidence() {
-		// TODO Auto-generated method stub
-		return 1;
+		double conf = 0;
+		int returnTime = Parameter.GAME_LENGTH - Parameter.RETURN_WINDOW;
+		if (player.getTimeElapsed() > returnTime) {
+			int timePast = player.getTimeElapsed() - returnTime;
+			conf = Math.pow((timePast-30) / 30.0, 2.0);
+		} else {
+			conf = 0;
+		}
+		return conf;
 	}
 
 	@Override
