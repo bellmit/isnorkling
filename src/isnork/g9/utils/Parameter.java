@@ -1,7 +1,5 @@
 package isnork.g9.utils;
 
-import java.util.ArrayList;
-
 import isnork.sim.GameObject.Direction;
 
 public class Parameter {

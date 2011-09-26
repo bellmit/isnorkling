@@ -7,7 +7,7 @@ import java.util.Random;
 import java.util.Set;
 
 import isnork.g9.comm.CommPrototype;
-import isnork.g9.comm.SimpleCommunicator;
+import isnork.g9.comm.MultiCharCommunicator;
 import isnork.g9.strategy.Strategy;
 import isnork.g9.utils.BoardParams;
 import isnork.g9.utils.GameParams;
@@ -91,7 +91,7 @@ public class Diver extends Player implements PlayerPrototype {
 		strategy.setBoardParams(params);
 		
 		GameParams.init(seaLifePossibilites, penalty, d, r, n);
-		commPrototype = new SimpleCommunicator();
+		commPrototype = new MultiCharCommunicator();
 		commPrototype.init();
 		
 		allDivers.add(this);

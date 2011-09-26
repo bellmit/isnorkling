@@ -2,40 +2,34 @@ package isnork.g9.comm;
 
 import isnork.g9.utils.GameParams;
 import isnork.sim.Observation;
-import isnork.sim.SeaLifePrototype;
 import isnork.sim.iSnorkMessage;
 
 import java.awt.geom.Point2D;
 import java.util.Set;
 
-public class SimpleCommunicator implements CommPrototype {
+public class MultiCharCommunicator implements CommPrototype {
 	
 	protected RecentlyCommunicatedSightings recentSightings = new RecentlyCommunicatedSightings();
-	protected Encoding encoding = new SimpleEncoding();
 	protected MessageProcessor queuedMessages = new MessageProcessor();
-	protected ObservationMemory memory = new ObservationMemory<Observation>();
+	protected ObservationMemory<Observation> memory = new ObservationMemory<Observation>();
 
+	private String buffer = "";
+	
 	@Override
 	public String createMessage(Point2D myPosition,
 			Set<Observation> whatYouSee, Set<iSnorkMessage> incomingMessages,
 			Set<Observation> playerLocations) {
 		
-		/**
-		 * 
-		 * We should communicate more info about static creatures if divers are far away
-		 * We can more communicate more about dynamic creatures if divers are nearby
-		 * Relative value of the target should be a factor
-		 * Relative density of the species can also be a factor
-		 * 
-		 * 
-		 */
-		
 		processIncoming(myPosition, whatYouSee,  incomingMessages, playerLocations);
-		String msg = encoding.encode(recentSightings.getNewHVT(whatYouSee), myPosition);
-		if(msg == null){
-			System.out.println("COMM WARN: Sending null msg");
+		
+		if (buffer.length() == 0) {
+			buffer = MultiCharEncoding.encode(recentSightings.getNewHVT(whatYouSee), myPosition);
 		}
-		return msg;
+
+		String toReturn = Character.toString(buffer.charAt(0));
+		buffer = buffer.substring(1);
+		
+		return toReturn;
 		
 	}
 
@@ -43,9 +37,7 @@ public class SimpleCommunicator implements CommPrototype {
 			Set<Observation> whatYouSee, Set<iSnorkMessage> incomingMessages,
 			Set<Observation> playerLocations) {
 		memory.processObservations(myPosition, whatYouSee);
-		queuedMessages.load(myPosition, whatYouSee,  incomingMessages, playerLocations,
-				memory, encoding);
-		
+		queuedMessages.load(myPosition, whatYouSee,  incomingMessages, playerLocations, memory);
 		
 	}
 

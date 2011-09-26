@@ -96,6 +96,14 @@ public class GameParams {
 	public static Set<SeaLifePrototype> getSeaLifePossibilites() {
 		return _instance.getSeaLifePossibilites();
 	}
+	
+	public static SeaLifePrototype getSeaLife(String name) {
+		for (SeaLifePrototype slp : _instance.getSeaLifePossibilites()) {
+			if (slp.getName().equals(name)) return slp;
+		}
+		
+		return null;
+	}
 
 	public static int getPenalty() {
 		return _instance.getPenalty();

@@ -10,25 +10,43 @@ public class MultiCharMessage implements Comparable<MultiCharMessage>, Comparato
 	public int octant;
 	public int distance;
 	public Direction dir;
-	public Point2D senderLoc;
 	public String species;
 	public int id;
+	
+	private double estimatedValue;
 	
 	public List<Point2D> diverLocations;
 	
 	public int getRawValue(){
 		return 0; 
 	}
+	
+	public double getEstimatedValue() {
+		return estimatedValue;
+	}
+	
+	public void setEstimatedValue(double e) {
+		estimatedValue = e;
+	}
+	
+	public void age() {
+		//TODO could be smarter
+		estimatedValue *= 0.9;
+	}
+	
+	public boolean die() {
+		return false;
+	}
 
 	@Override
 	public int compare(MultiCharMessage o1, MultiCharMessage o2) {
-		// TODO Auto-generated method stub
-		return 0;
+		Double wrapped = new Double(o1.estimatedValue);
+		return wrapped.compareTo(o2.estimatedValue);
 	}
 
 	@Override
 	public int compareTo(MultiCharMessage o) {
-		// TODO Auto-generated method stub
-		return 0;
+		Double wrapped = new Double(estimatedValue);
+		return wrapped.compareTo(o.getEstimatedValue());
 	}
 }

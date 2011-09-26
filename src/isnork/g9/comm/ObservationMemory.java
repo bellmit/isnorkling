@@ -12,8 +12,23 @@ import java.util.Set;
 
 public class ObservationMemory<K extends Observation> {
 	
-	private Set<Integer> creatureMemory = new HashSet<Integer>();
+	private Map<String, Set<Integer>> creatureMemory = new HashMap<String, Set<Integer>>();
 	private Map<String, SpeciesMemUnit> speciesMemory = new HashMap<String, SpeciesMemUnit>();
+	
+	public Map<String, Set<Integer>> getCreatureMemory() {
+		return creatureMemory;
+	}
+
+
+	public Map<String, SpeciesMemUnit> getSpeciesMemory() {
+		return speciesMemory;
+	}
+
+
+	public Set<Point2D> getLocationMemory() {
+		return locationMemory;
+	}
+
 	private Set<Point2D> locationMemory = new HashSet<Point2D>();
 	
 	public void init(final Set<SeaLifePrototype> seaCreatures){
@@ -39,8 +54,21 @@ public class ObservationMemory<K extends Observation> {
 	
 		locationMemory.add(myPosition);
 		for(Observation obs : whatYouSee){
+			
+			if (!speciesMemory.containsKey(obs.getName())) {
+				//TODO janky
+				speciesMemory.put(obs.getName(), new SpeciesMemUnit(null, 0));
+			}
+			
 			speciesMemory.get(obs.getName()).incrementFrequency();
-			creatureMemory.add(obs.getId());
+			
+			if (creatureMemory.containsKey(obs.getName())) {
+				creatureMemory.get(obs.getName()).add(obs.getId());
+			} else {
+				Set<Integer> seenIds = new HashSet<Integer>();
+				seenIds.add(obs.getId());
+				creatureMemory.put(obs.getName(), seenIds);
+			}
 		}
 		
 	}

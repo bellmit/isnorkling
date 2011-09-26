@@ -6,7 +6,7 @@
 package isnork.g9;
 
 import isnork.g9.comm.CommPrototype;
-import isnork.g9.comm.SimpleCommunicator;
+import isnork.g9.comm.MultiCharCommunicator;
 import isnork.g9.utils.GameParams;
 import isnork.sim.GameObject.Direction;
 import isnork.sim.Observation;
@@ -19,7 +19,7 @@ import java.util.Set;
 
 public class ReallyDumbPlayer extends Player {
 
-	private CommPrototype commPrototype = new SimpleCommunicator();
+	private CommPrototype commPrototype = new MultiCharCommunicator();
 	
 	private Direction[] choices = new Direction[] { Direction.N, Direction.NW, 
 			Direction.W, Direction.SW, Direction.S, 

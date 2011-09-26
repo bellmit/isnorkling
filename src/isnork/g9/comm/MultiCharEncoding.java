@@ -3,9 +3,8 @@ package isnork.g9.comm;
 import isnork.g9.utils.DirectionUtil;
 import isnork.g9.utils.GameParams;
 import isnork.g9.utils.Parameter;
-import isnork.sim.GameObject.Direction;
 import isnork.sim.Observation;
-import isnork.sim.iSnorkMessage;
+import isnork.sim.SeaLifePrototype;
 
 import java.awt.geom.Point2D;
 
@@ -59,10 +58,25 @@ public class MultiCharEncoding {
 	}
 	
 	private static int getSpeciesId(String name) {
+		int i = 0;
+		for (SeaLifePrototype slp : GameParams.getSeaLifePossibilites()) {
+			if (slp.getName().equals(name)) {
+				return i;
+			}
+			i++;
+		}
 		return 0;
 	}
 	
 	private static String getSpeciesName(int id) {
+		int i = 0;
+		for (SeaLifePrototype slp : GameParams.getSeaLifePossibilites()) {
+			if (i==id) {
+				return slp.getName();
+			}
+			i++;
+		}
+		
 		return "";
 	}
 
@@ -87,7 +101,6 @@ public class MultiCharEncoding {
 		message.distance = dist;
 		message.octant = octant;
 		message.species = getSpeciesName(species);
-		//TODO: Someone needs to set senderLoc on this shit
 		return message;
 	}
 	
