@@ -32,9 +32,7 @@ public class RecentlyCommunicatedSightings {
 		tick();
 		int max = -1;
 		Observation newHVT = null;
-		Iterator<Observation> iter = whatYouSee.iterator();
-		while(iter.hasNext()){
-			Observation obs = iter.next();
+		for (Observation obs : whatYouSee){
 			if(!recentlyCommunicatedSightings.containsKey(obs.getId()) && obs.happiness()>max){
 				newHVT = obs;
 			}
@@ -44,7 +42,7 @@ public class RecentlyCommunicatedSightings {
 			recentlyCommunicatedSightings.put(newHVT.getId(), new CommunicatedSighting(newHVT));			
 		}
 		
-		return newHVT;			
+		return newHVT;
 	}
 	
 	protected class CommunicatedSighting{

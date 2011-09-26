@@ -51,6 +51,11 @@ public class MultiCharMessageEvaluator {
 		
 		SeaLifePrototype species = GameParams.getSeaLife(msg.species);
 		
+		
+		if (species == null) {
+			return 0;
+		}
+		
 		double rawValue = Math.pow(0.5, specFreq) * species.getHappiness() * seenPenalty;
 		
 		double rawValueAdjustedForDistance = Math.max(rawValue * (1 - distance * 0.05), 0);

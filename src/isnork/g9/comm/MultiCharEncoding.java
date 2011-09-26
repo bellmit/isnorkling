@@ -89,11 +89,12 @@ public class MultiCharEncoding {
 		
 		int m = (int) (mschar*Math.pow(26, 2)) + midchar*26 + lschar;
 		
-		int species = m & speciesMask;
-		int id = m & idMask;
-		int dir = m & dirMask;
-		int dist = m & distMask;
-		int octant = m & octantMask;
+		int species = (m & speciesMask) >> (bitsForId + bitsForDir + bitsForDistance + bitsForOctant);
+		
+		int id = (m & idMask) >> (bitsForDir + bitsForDistance + bitsForOctant);
+		int dir = (m & dirMask) >> (bitsForDistance + bitsForOctant);
+		int dist = (m & distMask) >> (bitsForOctant);
+		int octant = (m & octantMask);
 		
 		MultiCharMessage message = new MultiCharMessage();
 		message.id = id;

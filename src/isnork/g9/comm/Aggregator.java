@@ -19,6 +19,11 @@ public class Aggregator {
 		Set<MultiCharMessage> parsedMsgs = new HashSet<MultiCharMessage>();
 		
 		for (iSnorkMessage m : ms) {
+			
+			if (m.getMsg() == null) {
+				continue;
+			}
+			
 			int sender = m.getSender();
 			if (!buffer.containsKey(sender)) {
 				buffer.put(sender, m.getMsg());

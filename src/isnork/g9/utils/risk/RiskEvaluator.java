@@ -50,6 +50,10 @@ public class RiskEvaluator implements RiskEvaluatorPrototype {
 			}
 		}
 		int u = sum / i;
+		
+		//TODO remove monkey patch
+		if (i==1) i = 2;
+		if (u==0) u = 1;
 		return (i+1)/(i-1) - 2 * g / (i * (i-1) * u);
 	}
 	

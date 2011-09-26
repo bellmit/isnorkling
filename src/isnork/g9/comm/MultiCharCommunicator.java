@@ -23,14 +23,19 @@ public class MultiCharCommunicator implements CommPrototype {
 		processIncoming(myPosition, whatYouSee,  incomingMessages, playerLocations);
 		
 		if (buffer.length() == 0) {
-			buffer = MultiCharEncoding.encode(recentSightings.getNewHVT(whatYouSee), myPosition);
+			Observation temp = recentSightings.getNewHVT(whatYouSee);
+			if (temp != null) {
+				buffer = MultiCharEncoding.encode(temp, myPosition);
+			}
 		}
 
-		String toReturn = Character.toString(buffer.charAt(0));
-		buffer = buffer.substring(1);
-		
-		return toReturn;
-		
+		if (buffer.length() != 0) {
+			String toReturn = Character.toString(buffer.charAt(0));
+			buffer = buffer.substring(1);
+			return toReturn;
+		} else {
+			return null;
+		}
 	}
 
 	private void processIncoming(Point2D myPosition,
