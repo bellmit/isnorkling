@@ -73,7 +73,7 @@ public class RiskAvoidance implements StrategyPrototype {
 			double danger = weightedDanger(nextSighting, newLoc);
 			
 			if (danger < minDanger) {
-				System.out.println("  risk: " + danger);
+				//System.out.println("  risk: " + danger);
 				minDanger = danger;
 				curDir = d;
 			}
@@ -83,8 +83,8 @@ public class RiskAvoidance implements StrategyPrototype {
 		
 		//TODO this is really primitive, not taking into consideration of board params, etc.
 		confidence = Math.min(minDanger / avgRisk, 1.0);
-		System.out.println("avgRisk: " + avgRisk);
-		System.out.println("confidence prepared: " + confidence);
+		//System.out.println("avgRisk: " + avgRisk);
+		//System.out.println("confidence prepared: " + confidence);
 		//confidence = 0.5 * Math.min(sighting.size() / 10, 1) + 0.5 * Math.min(minDanger / 200, 1);
 		
 		//Adjust by risk profile

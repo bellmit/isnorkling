@@ -32,6 +32,6 @@ public class Parameter {
 	// Utility function coefficients
 	public static final double ESCAPE_CONFIDENCE_COEFFICIENT = 10;
 	public static final double GLOBAL_STRATEGY_CONFIDENCE_COEFFICIENT = 6;
-	public static final double RETURNING_CONFIDENCE_COEFFICIENT = 50;
+	public static final double RETURNING_CONFIDENCE_COEFFICIENT = 15;
 	public static final double COMMUNICATION_CONFIDENCE_COEFFICIENT = 5;
 }
