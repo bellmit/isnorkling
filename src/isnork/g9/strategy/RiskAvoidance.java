@@ -4,14 +4,17 @@ import isnork.g9.PlayerPrototype;
 import isnork.g9.utils.BoardParams;
 import isnork.g9.utils.Parameter;
 import isnork.g9.utils.risk.IndividualRiskProfile;
-import isnork.sim.Observation;
 import isnork.sim.GameObject.Direction;
+import isnork.sim.Observation;
 import isnork.sim.SeaLifePrototype;
 
+import java.awt.Point;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
+
+import javax.jws.soap.SOAPBinding.ParameterStyle;
 
 public class RiskAvoidance implements StrategyPrototype {
 
@@ -86,6 +89,18 @@ public class RiskAvoidance implements StrategyPrototype {
 		System.out.println("avgRisk: " + avgRisk);
 		System.out.println("confidence prepared: " + confidence);
 		//confidence = 0.5 * Math.min(sighting.size() / 10, 1) + 0.5 * Math.min(minDanger / 200, 1);
+		
+		Point2D boatLoc = new Point(0,0);
+		if(loc.distance(boatLoc) < Parameter.RET_TO_BOAT_THRESHOLD &&
+				minDanger > Parameter.CONSERVATIVE_RISK_COEFF){
+			//return to boat
+			double thetaRad = Math.atan2(loc.getY()-boatLoc.getY(), boatLoc.getX()-loc.getX());
+			double thetaDeg = thetaRad * 180 / Math.PI;
+			if(thetaDeg < 0 ) thetaDeg += 360;
+			int dirChoice = ((int)thetaDeg)/45 + ( ((int) thetaDeg)%45 < 23 ? 0 : 1);
+			curDir = Parameter.ALL_DIRS[dirChoice];
+			
+		}
 		
 		//Adjust by risk profile
 		//confidence *= Math.sqrt(risk.getRiskAvoidance());
