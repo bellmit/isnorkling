@@ -127,7 +127,7 @@ public class Diver extends Player implements PlayerPrototype {
 			ArrayList<Integer> numDiversPerCircle = new ArrayList<Integer>();
 			int diversAdded = 0;
 			for (int i=0; i < numberOfCircles; i++) {
-				circleRadius = visibilityRadius * ( 1 + 2*i);
+				circleRadius = visibilityRadius * ( 1 + 2*i) + 1;
 				radii.add(circleRadius);
 				numDivers = (int) Math.floor( circleRadius / averageDistance );
 				diversAdded += numDivers;
