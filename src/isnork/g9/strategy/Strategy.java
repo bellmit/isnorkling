@@ -96,12 +96,15 @@ public class Strategy {
 		// Choose the most confident direction
 		Direction bestDir = null;
 		double highestConf = 0;
+		int chosenStrat = 0;
 		for (int i=0; i<4; i++) {
 			if (confs.get(i) > highestConf) {
 				bestDir = possDirs.get(i);
 				highestConf = confs.get(i);
+				chosenStrat = i;
 			}
 		}
+		System.out.println("Strategy: " + chosenStrat);
 		Diver diver = (Diver) player;
 		diver.setLastDirection(bestDir);
 		return bestDir;

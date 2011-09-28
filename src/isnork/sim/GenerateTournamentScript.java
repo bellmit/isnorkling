@@ -19,23 +19,25 @@ public class GenerateTournamentScript {
 		
 		
 		String[] maps = {
-				"lochness.xml",
-				"100.xml",
-				"400.xml",
-				"800.xml",
+				//"lochness.xml",
+				//"100.xml",
+				//"400.xml",
+				//"800.xml",
 				"DiversityDay.xml",
-				"DenseDiversityDay.xml",
-				"g2Benchmark.xml",
+				//"DenseDiversityDay.xml",
+				//"g2Benchmark.xml",
 				"HiddenTreasureWithMines.xml",
-				"lochnessPlus.xml",
+				//"lochnessPlus.xml",
 				"Piranha.xml",
+				//"g5_very_happy.xml",
+				//"g2Benchmark.xml",
+				"starwars.xml",
 				"g5_very_happy.xml",
-				"g2Benchmark.xml",
 
 		};
-		String[] rs = {"5","8","15"};
-		String[] ds = {"30","40", "60"};
-		String[] ns = {"1","2","7","20","30"};
+		String[] rs = {"6","3","15"};
+		String[] ds = {"23","12", "30"};
+		String[] ns = {"7","19","2","28"};
 //		String[] rs = {"5"};
 //		String[] ds = {"30","60"};
 //		String[] ns = {"20"};
