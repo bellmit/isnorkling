@@ -152,10 +152,10 @@ public class RiskAvoidance implements StrategyPrototype {
 			for (SeaLifePrototype ssl : b.getArrayListOfSeaLifePrototypes()) {
 				
 				if (!ssl.isDangerous()) { continue; }
-				totalHappiness+=ssl.getHappiness();
+				totalHappiness+=ssl.getHappiness()*ssl.getMaxCount();
 			}
 			
-			avgRisk = totalHappiness * 2.0 * 2.0 * 9.0 / (b.getDimension() * b.getDimension() * 4);
+			avgRisk = totalHappiness * 2.0 / (b.getDimension() * b.getDimension() * 4);
 		}
 	}
 
