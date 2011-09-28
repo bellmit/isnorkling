@@ -5,7 +5,7 @@ import isnork.sim.GameObject.Direction;
 public class Parameter {
 
 	
-	public static final double HAPPINESS_THRESHOLD = 0.5;
+	public static final double HAPPINESS_THRESHOLD = 0.6;
 	public static final Direction[] ALL_DIRS = new Direction[] {Direction.E, Direction.NE,
 		Direction.N, Direction.NW, Direction.W, Direction.SW, Direction.S, Direction.SE,
 		Direction.STAYPUT}; ;
@@ -28,7 +28,7 @@ public class Parameter {
 	public static final double GLOBAL_CIRCLE_STRATEGY_CONFIDENCE = 1;
 	public static final double GLOBAL_CIRCLE_STRATEGY_PERTURBATION_LIKELIHOOD = 0.1;
 	public static final int GLOBAL_CIRCLE_STRATEGY_MAX_PERTURBATION_DISTANCE = 2;
-	public static final int RETURN_WINDOW = 60;
+	public static final int RETURN_WINDOW = 75;
 	public static final int GAME_LENGTH = 480;
 	
 	public static double DANGER_ESTIMATION_DROPPING_FACTOR = 0.1;

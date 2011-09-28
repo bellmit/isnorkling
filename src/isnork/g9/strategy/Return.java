@@ -75,7 +75,7 @@ public class Return implements StrategyPrototype {
 			return 1;
 		}
 		
-		int returnTime = Parameter.GAME_LENGTH - Parameter.RETURN_WINDOW;
+		int returnTime =Parameter.GAME_LENGTH - Parameter.RETURN_WINDOW;
 		if (player.getTimeElapsed() > returnTime) {
 			int timePast = player.getTimeElapsed() - returnTime;
 			conf = Math.pow( 1 - (Parameter.RETURN_WINDOW - timePast) / Parameter.RETURN_WINDOW, 2.0 );
