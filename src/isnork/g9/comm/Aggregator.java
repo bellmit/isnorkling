@@ -38,6 +38,7 @@ public class Aggregator {
 				
 				if (buffer.get(sender).length()==3) {
 					MultiCharMessage multiMsg = MultiCharEncoding.decode(buffer.get(sender));
+					
 					multiMsg.diverLocations = diverLocations.get(sender);
 					parsedMsgs.add(multiMsg);
 					

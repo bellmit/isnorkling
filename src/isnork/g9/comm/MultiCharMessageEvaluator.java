@@ -11,6 +11,8 @@ public class MultiCharMessageEvaluator {
 	
 	public static double evaluate(Point2D myPosition, ObservationMemory<Observation> memory, MultiCharMessage msg){
 		
+		System.out.println(msg);
+		
 		Point2D senderLoc = msg.diverLocations.get(0);
 		
 		double adjustedTargetDistance = GameParams.getVisibilityRadius() * msg.distance / 4.0 ;
@@ -59,6 +61,8 @@ public class MultiCharMessageEvaluator {
 		double rawValue = Math.pow(0.5, specFreq) * species.getHappiness() * seenPenalty;
 		
 		double rawValueAdjustedForDistance = Math.max(rawValue * (1 - distance * 0.05), 0);
+		
+		System.out.println("estimated value: " + rawValueAdjustedForDistance);
 		
 		return rawValueAdjustedForDistance;
 	}

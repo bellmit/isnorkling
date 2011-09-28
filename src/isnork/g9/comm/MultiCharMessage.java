@@ -49,4 +49,8 @@ public class MultiCharMessage implements Comparable<MultiCharMessage>, Comparato
 		Double wrapped = new Double(estimatedValue);
 		return wrapped.compareTo(o.getEstimatedValue());
 	}
+	
+	public String toString() {
+		return "octant:"+octant+",distance:"+distance+",dir:"+dir+",species:"+species+"id:"+id;
+	}
 }
