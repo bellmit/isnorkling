@@ -20,6 +20,7 @@ public class Suggestion {
 		this.dir = dir;
 	}
 	public double getConfidence() {
+		System.out.println(confidence);
 		return confidence;
 	}
 	public void setConfidence(double confidence) {

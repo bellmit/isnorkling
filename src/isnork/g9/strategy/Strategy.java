@@ -104,7 +104,6 @@ public class Strategy {
 				chosenStrat = i;
 			}
 		}
-		System.out.println("Strategy: " + chosenStrat);
 		Diver diver = (Diver) player;
 		diver.setLastDirection(bestDir);
 		return bestDir;
