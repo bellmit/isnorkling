@@ -9,4 +9,5 @@ public class ObservationWrapper {
 	public Direction direction;
 	public Point2D location;
 	public int id;
+	public boolean isStatic;
 }

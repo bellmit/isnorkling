@@ -79,7 +79,7 @@ public class MultiCharMessage implements Comparable<MultiCharMessage>, Comparato
 	public void age() {
 		//TODO could be smarter
 		if (!this.isStatic()) {
-			estimatedValue *= Parameter.COMMUNICATION_MESSAGE_VALUE_DECAY_FACTORY;
+			estimatedValue *= Parameter.COMMUNICATION_MESSAGE_VALUE_DECAY_FACTOR;
 			estimatedLocation.setLocation(estimatedLocation.getX() + dir.dx, estimatedLocation.getY() + dir.dy);
 		}
 	}
