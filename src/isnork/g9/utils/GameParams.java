@@ -87,7 +87,7 @@ public class GameParams {
 			for (SeaLifePrototype slp : seaLifePossibilites) {
 				int count = (((slp.getMaxCount() + slp.getMinCount()) % 2 == 0) ? (slp.getMaxCount() + slp.getMinCount())/2 : (slp.getMaxCount() + slp.getMinCount())/2 + 1 );
 				total += count;
-				if (!slp.isDangerous()) continue;
+				if (!(slp.isDangerous() && slp.getSpeed()!=0)) continue;
 				
 				totalDangerous+=count;
 			}
