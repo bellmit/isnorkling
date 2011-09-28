@@ -167,7 +167,8 @@ public class Diver extends Player implements PlayerPrototype {
 		location = myPosition;
 		
 		strategy.setSighting(sighting);
-		//return null;
+		
+		System.out.println("=== "+ this.getId() + " is about to trigger communication ===");
 		return commPrototype.createMessage(myPosition, whatYouSee, incomingMessages, playerLocations);
 	}
 

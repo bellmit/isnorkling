@@ -28,28 +28,42 @@ public class MultiCharEncoding {
 		
 		Point2D obsLoc = obs.getLocation();
 		
-		int id = obs.getId() % (1 << bitsForId);
+		System.out.println(obs);
+		
 		int species = getSpeciesId(obs.getName());
+		int id = obs.getId() % (1 << bitsForId);
 		int direction = Parameter.DIRECTION_LOOKUP(obs.getDirection());
+		int distance= (int)(obsLoc.distance(myPosition) * (1 << bitsForDistance) / GameParams.getVisibilityRadius());
+		if (distance == 0) { distance = 1; }
+		int octant = DirectionUtil.getRelativeOctant(myPosition, obsLoc);
 		
-		int shift = bitsForSpecies;
-		int msg = species << (totalBits - shift);
-		shift += bitsForId;
-		msg = msg | id << (totalBits - shift);
-		shift += bitsForDir; 
-		msg = msg | direction << (totalBits - shift); 
+		System.out.println("species: " + species);
+		System.out.println("id: " + id);
+		System.out.println("direction: " + direction);
+		System.out.println("distance: " + distance);
+		System.out.println("octant: " + octant);
 		
-		int dist = (int)(obsLoc.distance(myPosition) * (1 << bitsForDistance) / GameParams.getVisibilityRadius());
-		if (dist == 0) { dist = 1; }
+		String speciesBin = pad(Integer.toBinaryString(species), bitsForSpecies);
+		String idBin = pad(Integer.toBinaryString(id), bitsForId);
+		String directionBin = pad(Integer.toBinaryString(direction), bitsForDir);
+		String distanceBin = pad(Integer.toBinaryString(distance), bitsForDistance);
+		String octantBin = pad(Integer.toBinaryString(octant), bitsForOctant);
 		
-		shift += bitsForDistance;
+		String finalBin = speciesBin + idBin + directionBin + distanceBin + octantBin;
 		
-		msg |= dist << (totalBits-shift);
-		msg |= DirectionUtil.getRelativeOctant(myPosition, obsLoc);
+		System.out.println("Binary representation: " + finalBin);
+		
+		int msg = toDec(finalBin);
 		
 		int mschar = (msg / (int)Math.pow(26, 2));
 		int midchar = (msg / 26) %26;
 		int lschar = msg % 26;
+		
+		System.out.println("  msg:" + msg);
+		System.out.println("  mschar:" + mschar);
+		System.out.println("  midchar:" + midchar);
+		System.out.println("  lschar:" + lschar);
+		
 		return new String(new char[]{(char)('a'+mschar)})+
 				new String(new char[]{(char)('a'+midchar)}) +
 				new String(new char[]{(char)('a'+lschar)});
@@ -78,6 +92,19 @@ public class MultiCharEncoding {
 		}
 		
 		return "";
+	}
+	
+	private static int toDec(String bin) {
+		return Integer.parseInt(bin, 2);
+	}
+	
+	private static String pad(String bin, int len) {
+		String r = bin;
+		while (r.length() < len) {
+			r = "0" + r;
+		}
+		
+		return r;
 	}
 
 	public static MultiCharMessage decode(String msg) {

@@ -37,4 +37,8 @@ public class Observation {
 	public Direction getDirection() {
 		return dir;
 	}
+	
+	public String toString() {
+		return "name:" + name + ", id:" + id + ", happiness:" + happy;
+	}
 }
