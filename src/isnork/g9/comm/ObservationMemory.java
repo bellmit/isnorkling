@@ -14,6 +14,7 @@ public class ObservationMemory<K extends Observation> {
 	
 	private Map<String, Set<Integer>> creatureMemory = new HashMap<String, Set<Integer>>();
 	private Map<String, SpeciesMemUnit> speciesMemory = new HashMap<String, SpeciesMemUnit>();
+	private double happinessScored=0;
 	
 	public Map<String, Set<Integer>> getCreatureMemory() {
 		return creatureMemory;
@@ -27,6 +28,10 @@ public class ObservationMemory<K extends Observation> {
 
 	public Set<Point2D> getLocationMemory() {
 		return locationMemory;
+	}
+	
+	public double getHappinessScored(){
+		return happinessScored;
 	}
 
 	private Set<Point2D> locationMemory = new HashSet<Point2D>();
@@ -61,6 +66,7 @@ public class ObservationMemory<K extends Observation> {
 			}
 			
 			speciesMemory.get(obs.getName()).incrementFrequency();
+			updateHappiness(myPosition, obs);
 			
 			if (creatureMemory.containsKey(obs.getName())) {
 				creatureMemory.get(obs.getName()).add(obs.getId());
@@ -71,6 +77,43 @@ public class ObservationMemory<K extends Observation> {
 			}
 		}
 		
+	}
+	
+	public void updateHappiness(Point2D myPosition, Observation obs){
+		
+		double happy = 0;
+		SeaLifePrototype s = GameParams.getSeaLife(obs.getName());
+		
+		if(s == null) return;
+		System.out.println(obs.getName());
+		int speciesFreq = speciesMemory.get(s.getName()).getFrequency();
+		System.out.println("Species Freq: "+speciesFreq);
+		if(!myPosition.equals(new Point2D.Double(0, 0))) { // if on the boat, doesn't affect
+		    if(s.isDangerous() && obs.getLocation().distance(myPosition) <= 1.5){
+		    	happy = happy - s.getHappiness()*2;
+		    }
+		    else if(creatureMemory.containsKey(obs.getId())){
+		    	happy = 0;
+		    }
+		    else if(speciesFreq==0)
+		    {
+		        happy = s.getHappiness();
+		    }
+		    else if(speciesFreq == 1)
+		    {
+		      happy = s.getHappiness()/2;
+		    }
+		    else if(speciesFreq == 2 )
+		    {
+		        happy = s.getHappiness()/4;
+		    }
+		    }
+		    
+		    System.out.println("HAPPY HAPPY: "+happy);
+		    happinessScored += happy > 0 ? happy : 0;
+		    System.out.println("HAPPY: "+happinessScored);
+		
+
 	}
 
 }

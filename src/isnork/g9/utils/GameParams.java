@@ -29,6 +29,7 @@ public class GameParams {
 		final int overallHVT; // The maximum value creature on the board
 		final int staticHVT;
 		final int dynamicHVT;
+		final double maxHappiness;
 		
 		_GameParams(Set<SeaLifePrototype> seaLifePossibilites, int penalty,
 				int d, int r, int n){
@@ -40,17 +41,36 @@ public class GameParams {
 			
 			int maxd = -1;
 			int maxs = -1;
+			double maxH=0;
 			
 			for(SeaLifePrototype seaLifePrototype : seaLifePossibilites){
 				if(seaLifePrototype.getSpeed()==0 && seaLifePrototype.getHappiness() > maxs)
 					maxs = seaLifePrototype.getHappiness();
 				if(seaLifePrototype.getSpeed()!=0 && seaLifePrototype.getHappiness() > maxd)
 					maxd = seaLifePrototype.getHappiness();
+				int minCount = seaLifePrototype.getMinCount();
+				switch(minCount){
+				case 0:	break;
+				case 1: {
+					maxH += seaLifePrototype.getHappinessD();
+					break;
+				}
+				case 2: {
+					maxH += seaLifePrototype.getHappinessD()*1.5;
+					break;
+				}
+				default: {
+					maxH += seaLifePrototype.getHappinessD()*1.75;
+				}
+				}
+				
 			}
 			
 			staticHVT = maxs < 0 ? 0 : maxs;
 			dynamicHVT = maxd < 0 ? 0 : maxd;
 			overallHVT = staticHVT > dynamicHVT ? staticHVT : dynamicHVT;
+			maxHappiness = maxH;
+			System.out.println("Max H: "+maxHappiness);
 		}
 
 		public Set<SeaLifePrototype> getSeaLifePossibilites() {
@@ -83,6 +103,10 @@ public class GameParams {
 
 		public int getDynamicHVT() {
 			return dynamicHVT;
+		}
+		
+		public double getMaxHappiness(){
+			return maxHappiness;
 		}
 		
 		public int getNumberOfHappy() {
@@ -159,6 +183,10 @@ public class GameParams {
 	
 	public static int getNumberOfHappy() {
 		return _instance.getNumberOfHappy();
+	}
+	
+	public static double getMaxHappinessPossible(){
+		return _instance.getMaxHappiness();
 	}
 
 }

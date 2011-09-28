@@ -20,5 +20,6 @@ public interface PlayerPrototype {
 	public CommPrototype getComm();
 	public Random getRandom();
 	public int getDesiredRadius();
+	public double getHappiness();
 	
 }

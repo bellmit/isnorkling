@@ -67,6 +67,11 @@ public class MultiCharCommunicator implements CommPrototype {
 		memory.init(GameParams.getSeaLifePossibilites());
 		
 	}
+
+	@Override
+	public ObservationMemory getObservationMemory() {
+		return memory;
+	}
 	
 
 }

@@ -4,8 +4,10 @@ import java.awt.geom.Point2D;
 import java.util.List;
 import java.util.Set;
 
+import isnork.g9.Diver;
 import isnork.g9.PlayerPrototype;
 import isnork.g9.utils.BoardParams;
+import isnork.g9.utils.GameParams;
 import isnork.g9.utils.Parameter;
 import isnork.sim.GameObject.Direction;
 import isnork.sim.Observation;
@@ -62,6 +64,16 @@ public class Return implements StrategyPrototype {
 	@Override
 	public double getConfidence() {
 		double conf = 0;
+		if(player instanceof Diver){
+			System.out.println("HAPPINESS SCORED: "+((Diver)player).getHappinessScored());
+		}
+		if(player instanceof Diver &&
+				((Diver)player).getHappinessScored() > 
+		(Parameter.HAPPINESS_THRESHOLD * GameParams.getMaxHappinessPossible())){
+			System.out.println("********TIME TO GO HOME***********");
+			return 1;
+		}
+		
 		int returnTime = Parameter.GAME_LENGTH - Parameter.RETURN_WINDOW;
 		if (player.getTimeElapsed() > returnTime) {
 			int timePast = player.getTimeElapsed() - returnTime;

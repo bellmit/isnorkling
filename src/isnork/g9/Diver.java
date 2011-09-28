@@ -192,4 +192,8 @@ public class Diver extends Player implements PlayerPrototype {
 	public void setLastDirection(Direction lastDirection) {
 		this.lastDirection = lastDirection;
 	}
+	
+	public double getHappinessScored(){
+		return this.getComm().getObservationMemory().getHappinessScored();
+	}
 }
