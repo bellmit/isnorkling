@@ -29,7 +29,7 @@ public class MessageProcessor {
 		
 		if(msgHeap.isEmpty()){
 			System.out.println("Heap is empty");
-			return new Suggestion(GameObject.Direction.STAYPUT, 0.5);
+			return new Suggestion(GameObject.Direction.STAYPUT, 0);
 		}
 		
 		if(currentDest == null || currentDest.diverLocations.get(0).distance(myPosition)==0
@@ -61,7 +61,7 @@ public class MessageProcessor {
 		for(MultiCharMessage msg : parsedMsgs){
 			double val = MultiCharMessageEvaluator.evaluate(myPosition, memory, msg);
 			msg.setEstimatedValue(val);
-			if(val > 0 && val < 1){
+			if(val > 0){
 				msgHeap.add(msg);
 			}
 			
