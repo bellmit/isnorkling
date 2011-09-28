@@ -32,10 +32,11 @@ public class Parameter {
 	public static final double COMMUNICATION_MESSAGE_VALUE_DECAY_FACTORY = 0.9;
 	
 	// Utility function coefficients
-	public static final double ESCAPE_CONFIDENCE_COEFFICIENT = 13;
+	public static final double ESCAPE_CONFIDENCE_COEFFICIENT = 30;
 	public static final double GLOBAL_STRATEGY_CONFIDENCE_COEFFICIENT = 6;
-	public static final double RETURNING_CONFIDENCE_COEFFICIENT = 18;
-	public static final double COMMUNICATION_CONFIDENCE_COEFFICIENT = 11;
+	public static final double RETURNING_CONFIDENCE_COEFFICIENT = 40;
+	public static final double COMMUNICATION_CONFIDENCE_COEFFICIENT = 20;
+	
 	public static final double RET_TO_BOAT_THRESHOLD = 2;
 	public static final double CONSERVATIVE_RISK_COEFF = 0.3;
 }

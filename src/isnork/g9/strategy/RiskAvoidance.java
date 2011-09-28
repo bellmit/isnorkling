@@ -52,7 +52,6 @@ public class RiskAvoidance implements StrategyPrototype {
 		Point2D loc = player.getLocation();
 		
 		HashSet<ObservationWrapper> nextSighting = new HashSet<ObservationWrapper>();
-		
 		for (Observation ob : sighting) {
 			ObservationWrapper o = new ObservationWrapper();
 			o.happiness = getHappiness(ob.getName());
@@ -72,6 +71,9 @@ public class RiskAvoidance implements StrategyPrototype {
 		Direction curDir = Direction.STAYPUT;
 		
 		for (Direction d : dirs) {
+			if(d.equals(Direction.STAYPUT)){
+				System.out.println("Evaluating stayput");
+			}
 			Point2D newLoc = new Point2D.Double(loc.getX() + d.dx, loc.getY() + d.dy);
 			double danger = weightedDanger(nextSighting, newLoc);
 			
@@ -91,6 +93,8 @@ public class RiskAvoidance implements StrategyPrototype {
 		if(loc.distance(boatLoc) < Parameter.RET_TO_BOAT_THRESHOLD &&
 				minDanger > Parameter.CONSERVATIVE_RISK_COEFF){
 			//return to boat
+			if(loc.equals(boatLoc))return Direction.STAYPUT;
+					
 			double thetaRad = Math.atan2(loc.getY()-boatLoc.getY(), boatLoc.getX()-loc.getX());
 			double thetaDeg = thetaRad * 180 / Math.PI;
 			if(thetaDeg < 0 ) thetaDeg += 360;
@@ -101,7 +105,7 @@ public class RiskAvoidance implements StrategyPrototype {
 		
 		//Adjust by risk profile
 		//confidence *= Math.sqrt(risk.getRiskAvoidance());
-		
+		System.out.println("Recommended direction: "+curDir);
 		return curDir;
 	}
 	
@@ -123,6 +127,7 @@ public class RiskAvoidance implements StrategyPrototype {
 			double distance = loc.distance(ob.location);
 			
 			if (distance <= 1.5) {
+				System.out.println("Very close to danger: " + ob.id);
 				danger+=Math.abs(ob.happiness*2);
 			} else {
 				double badFactor = 0.79;
