@@ -32,6 +32,9 @@ public class MultiCharMessage implements Comparable<MultiCharMessage>, Comparato
 	}
 	
 	private boolean isStatic() {
+		if (GameParams.getSeaLife(species) == null) {
+			return false;
+		}
 		return (GameParams.getSeaLife(species).getSpeed()==0);
 	}
 	

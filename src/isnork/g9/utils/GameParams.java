@@ -80,6 +80,24 @@ public class GameParams {
 		public int getPenalty() {
 			return penalty;
 		}
+		
+		public boolean isDenselyDangerous() {
+			int totalDangerous = 0;
+			int total = 0;
+			for (SeaLifePrototype slp : seaLifePossibilites) {
+				int count = (((slp.getMaxCount() + slp.getMinCount()) % 2 == 0) ? (slp.getMaxCount() + slp.getMinCount())/2 : (slp.getMaxCount() + slp.getMinCount())/2 + 1 );
+				total += count;
+				if (!slp.isDangerous()) continue;
+				
+				totalDangerous+=count;
+			}
+			
+			if (total == 0) { total = 1; }
+			
+			int boardArea = this.getGridSize() * this.getGridSize() * 4; 
+			
+			return (totalDangerous*1.0/total >= 0.95 && totalDangerous*1.0/boardArea > 0.01);
+		}
 
 		public int getNumDivers() {
 			return numDivers;
@@ -187,6 +205,10 @@ public class GameParams {
 	
 	public static double getMaxHappinessPossible(){
 		return _instance.getMaxHappiness();
+	}
+	
+	public static boolean isDenselyDangerous() {
+		return _instance.isDenselyDangerous();
 	}
 
 }

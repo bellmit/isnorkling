@@ -3,7 +3,6 @@ package isnork.g9.strategy;
 import isnork.g9.PlayerPrototype;
 import isnork.g9.utils.BoardParams;
 import isnork.g9.utils.Parameter;
-import isnork.g9.utils.risk.IndividualRiskProfile;
 import isnork.sim.GameObject.Direction;
 import isnork.sim.Observation;
 import isnork.sim.SeaLifePrototype;
@@ -104,7 +103,7 @@ public class RiskAvoidance implements StrategyPrototype {
 		//TODO this is really primitive, not taking into consideration of board params, etc.
 		confidence = Math.min(minDanger / avgRisk, 1.0);
 		
-		//System.out.println("mindanger normalized: " + confidence);
+		System.out.println("mindanger normalized: " + confidence);
 		//System.out.println("static ratio: " + staticToMovingRatio);
 		
 		if (staticToMovingRatio < Parameter.DANGER_MOSTLY_CONSIDERED_AS_STATIC) {

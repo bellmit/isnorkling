@@ -5,11 +5,13 @@ import isnork.g9.PlayerPrototype;
 //import isnork.g9.comm.Suggestion;
 import isnork.g9.comm.Suggestion;
 import isnork.g9.utils.BoardParams;
+import isnork.g9.utils.GameParams;
 import isnork.g9.utils.Parameter;
 import isnork.g9.utils.risk.IndividualRiskProfile;
 import isnork.sim.GameObject.Direction;
 import isnork.sim.Observation;
 
+import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
@@ -27,6 +29,7 @@ public class Strategy {
 	private StrategyPrototype global;
 	private StrategyPrototype riskAvoidance;
 	private StrategyPrototype returning;
+	private StrategyPrototype randomWalk;
 	
 	//private StrategyPrototype random;
 	
@@ -42,6 +45,8 @@ public class Strategy {
 		
 		returning = new Return();
 		returning.setPlayer(p);
+		
+		randomWalk = new RandomWalk();
 		
 	}
 	
@@ -70,7 +75,41 @@ public class Strategy {
 	
 	// Utility Function :)
 	public Direction getDirection() {
-					
+		
+		if (GameParams.isDenselyDangerous()) {
+			
+			if (player.getId() % 10 != 0) {
+				return Direction.STAYPUT;
+			}
+			
+			if (player.getTimeElapsed() > Parameter.GAME_LENGTH - Parameter.RETURN_WINDOW) {
+				return returning.getDirection();
+			}
+			
+			Direction tempd;
+			Point2D nl ;
+			
+			do {
+				
+				double tempr = riskAvoidance.getConfidence();
+				
+				if (tempr > 0.95) {
+					return riskAvoidance.getDirection();
+				}
+				
+				if (Math.random()>=0.9) {
+					tempd = randomWalk.getDirection();
+				} else {
+					tempd = riskAvoidance.getDirection();
+				}
+				
+				nl = new Point2D.Double(player.getLocation().getX() + tempd.dx, player.getLocation().getY() + tempd.dy);
+				
+			} while (nl.distance(new Point2D.Double(0,0))>1.5);
+			
+			return tempd;
+		}
+		
 		ArrayList<Direction> possDirs = new ArrayList<Direction>();
 		ArrayList<Double> confs = new ArrayList<Double>();
 		ArrayList<String> strats = new ArrayList<String>();
