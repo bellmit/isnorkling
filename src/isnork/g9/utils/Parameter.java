@@ -30,7 +30,7 @@ public class Parameter {
 	public static final int GAME_LENGTH = 480;
 	
 	// Utility function coefficients
-	public static final double ESCAPE_CONFIDENCE_COEFFICIENT = 10;
+	public static final double ESCAPE_CONFIDENCE_COEFFICIENT = 30;
 	public static final double GLOBAL_STRATEGY_CONFIDENCE_COEFFICIENT = 6;
 	public static final double RETURNING_CONFIDENCE_COEFFICIENT = 15;
 	public static final double COMMUNICATION_CONFIDENCE_COEFFICIENT = 5;
