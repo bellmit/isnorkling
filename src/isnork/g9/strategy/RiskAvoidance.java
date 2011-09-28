@@ -52,7 +52,6 @@ public class RiskAvoidance implements StrategyPrototype {
 		Point2D loc = player.getLocation();
 		
 		HashSet<ObservationWrapper> nextSighting = new HashSet<ObservationWrapper>();
-		
 		for (Observation ob : sighting) {
 			ObservationWrapper o = new ObservationWrapper();
 			o.happiness = getHappiness(ob.getName());
