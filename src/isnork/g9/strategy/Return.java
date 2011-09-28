@@ -66,6 +66,7 @@ public class Return implements StrategyPrototype {
 		double conf = 0;
 		if(player instanceof Diver){
 			System.out.println("HAPPINESS SCORED: "+((Diver)player).getHappinessScored());
+			System.out.println("MAXIMUM HAPPINESS FOR THE BOARD: " + GameParams.getMaxHappinessPossible());
 		}
 		if(player instanceof Diver &&
 				((Diver)player).getHappinessScored() > 

@@ -84,12 +84,12 @@ public class RiskAvoidance implements StrategyPrototype {
 		
 		for (Direction d : dirs) {
 			
-			System.out.println("Checking for direction: " + d);
+			//System.out.println("Checking for direction: " + d);
 			
 			Point2D newLoc = new Point2D.Double(loc.getX() + d.dx, loc.getY() + d.dy);
 			double danger = weightedDanger(nextSighting, newLoc);
 			
-			System.out.println("danger: " + danger);
+			//System.out.println("danger: " + danger);
 			
 			if (danger < minDanger) {
 				minDanger = danger;
@@ -99,13 +99,13 @@ public class RiskAvoidance implements StrategyPrototype {
 		
 		if (minDanger == Double.MAX_VALUE) { minDanger = 0; }
 		
-		System.out.println("mindanger: " + minDanger);
+		//System.out.println("mindanger: " + minDanger);
 		
 		//TODO this is really primitive, not taking into consideration of board params, etc.
 		confidence = Math.min(minDanger / avgRisk, 1.0);
 		
-		System.out.println("mindanger normalized: " + confidence);
-		System.out.println("static ratio: " + staticToMovingRatio);
+		//System.out.println("mindanger normalized: " + confidence);
+		//System.out.println("static ratio: " + staticToMovingRatio);
 		
 		if (staticToMovingRatio < Parameter.DANGER_MOSTLY_CONSIDERED_AS_STATIC) {
 		
@@ -146,7 +146,7 @@ public class RiskAvoidance implements StrategyPrototype {
 			double distance = loc.distance(ob.location);
 			
 			if (distance <= 1.5) {
-				System.out.println("Very close to danger: " + ob.id);
+				//System.out.println("Very close to danger: " + ob.id);
 				danger+=Math.abs(ob.happiness*2);
 			} else {
 				double badFactor = 0.79;

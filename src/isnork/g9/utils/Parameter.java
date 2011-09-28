@@ -5,7 +5,7 @@ import isnork.sim.GameObject.Direction;
 public class Parameter {
 
 	
-	public static final double HAPPINESS_THRESHOLD = 0.0001;
+	public static final double HAPPINESS_THRESHOLD = 0.5;
 	public static final Direction[] ALL_DIRS = new Direction[] {Direction.E, Direction.NE,
 		Direction.N, Direction.NW, Direction.W, Direction.SW, Direction.S, Direction.SE,
 		Direction.STAYPUT}; ;

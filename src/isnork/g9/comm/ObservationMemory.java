@@ -87,23 +87,25 @@ public class ObservationMemory<K extends Observation> {
 		if(s == null) return;
 		System.out.println(obs.getName());
 		int speciesFreq = speciesMemory.get(s.getName()).getFrequency();
-		System.out.println("Species Freq: "+speciesFreq);
 		if(!myPosition.equals(new Point2D.Double(0, 0))) { // if on the boat, doesn't affect
+			
+			System.out.println("actual happiness: " + s.getHappiness());
+			
 		    if(s.isDangerous() && obs.getLocation().distance(myPosition) <= 1.5){
 		    	happy = happy - s.getHappiness()*2;
 		    }
 		    else if(creatureMemory.containsKey(obs.getId())){
 		    	happy = 0;
 		    }
-		    else if(speciesFreq==0)
+		    else if(speciesFreq==1)
 		    {
 		        happy = s.getHappiness();
 		    }
-		    else if(speciesFreq == 1)
+		    else if(speciesFreq == 2)
 		    {
 		      happy = s.getHappiness()/2;
 		    }
-		    else if(speciesFreq == 2 )
+		    else if(speciesFreq == 3 )
 		    {
 		        happy = s.getHappiness()/4;
 		    }
