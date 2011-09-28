@@ -73,39 +73,45 @@ public class Strategy {
 					
 		ArrayList<Direction> possDirs = new ArrayList<Direction>();
 		ArrayList<Double> confs = new ArrayList<Double>();
+		ArrayList<String> strats = new ArrayList<String>();
 		
 		// Risk avoidance
 		possDirs.add(riskAvoidance.getDirection());
 		confs.add(riskAvoidance.getConfidence() * Parameter.ESCAPE_CONFIDENCE_COEFFICIENT);
+		strats.add("* Escape");
 		
 		// Global strategy
 		global.setLocation(player.getLocation());
 		possDirs.add(global.getDirection());
 		confs.add(Parameter.GLOBAL_CIRCLE_STRATEGY_CONFIDENCE * 
 					Parameter.GLOBAL_STRATEGY_CONFIDENCE_COEFFICIENT);
+		strats.add("* Global");
 		
 		// Returning
 		possDirs.add(returning.getDirection());
 		confs.add(returning.getConfidence() * Parameter.RETURNING_CONFIDENCE_COEFFICIENT);
+		strats.add("* Return");
 		
 		// Communication
 		Suggestion sug = player.getComm().getDirection(player.getLocation());
 		possDirs.add(sug.getDir());
 		confs.add(sug.getConfidence() * Parameter.COMMUNICATION_CONFIDENCE_COEFFICIENT);
+		strats.add("* Comm");
 		
 		// Choose the most confident direction
-		Direction bestDir = null;
+		Direction bestDir = Direction.STAYPUT;
 		double highestConf = 0;
-		int chosenStrat = 0;
+		String whichStrat = "";
 		for (int i=0; i<4; i++) {
 			if (confs.get(i) > highestConf) {
 				bestDir = possDirs.get(i);
 				highestConf = confs.get(i);
-				chosenStrat = i;
+				whichStrat = strats.get(i);
 			}
 		}
 		Diver diver = (Diver) player;
 		diver.setLastDirection(bestDir);
+		System.out.println(whichStrat);
 		return bestDir;
 	}
 }

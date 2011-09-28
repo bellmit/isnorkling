@@ -14,15 +14,12 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
-import javax.jws.soap.SOAPBinding.ParameterStyle;
-
 public class RiskAvoidance implements StrategyPrototype {
 
 	private PlayerPrototype player;
 	private Set<Observation> sighting;
 	private double confidence;
 	private Strategy strategy;
-	private IndividualRiskProfile risk;
 	private BoardParams board;
 	
 	private static double avgRisk = -1;
@@ -37,7 +34,6 @@ public class RiskAvoidance implements StrategyPrototype {
 	@Override
 	public void setOverallStrategy(Strategy s) {
 		strategy = s;
-		risk = strategy.getRisk();
 	}
 
 	public void setSighting(Set<Observation> s) {
@@ -45,11 +41,13 @@ public class RiskAvoidance implements StrategyPrototype {
 	}
 
 	@Override
-	//TODO too simple to assume dangerous creatures stay in same direction
 	public Direction getDirection() {
 		confidence = 0;
 		
 		Point2D loc = player.getLocation();
+		
+		double totalDangerHappiness = 0.0;
+		double totalStaticDangerHappiness = 0.0;
 		
 		HashSet<ObservationWrapper> nextSighting = new HashSet<ObservationWrapper>();
 		for (Observation ob : sighting) {
@@ -58,24 +56,40 @@ public class RiskAvoidance implements StrategyPrototype {
 			o.direction = ob.getDirection();
 			o.id = ob.getId();
 			o.location = ob.getLocation();
+			o.isStatic = false;
 			
-			if (o.location == null || o.direction == null) { continue; }
+			if (o.location == null) { continue; }
+			
+			if (o.direction == null) { o.direction = Direction.STAYPUT; o.isStatic = true; }
 			
 			o.location.setLocation(o.location.getX() + o.direction.dx, o.location.getY() + o.direction.dy);
+			
+			totalDangerHappiness += o.happiness;
+			
+			if (o.isStatic) {
+				totalStaticDangerHappiness += o.happiness;
+			}
 			
 			nextSighting.add(o);
 		}
 		
+		double staticToMovingRatio = 0.0;
+		
+		if (totalDangerHappiness > 0.0) {
+			staticToMovingRatio = totalStaticDangerHappiness / totalDangerHappiness;
+		}
 		
 		double minDanger = Double.MAX_VALUE;
 		Direction curDir = Direction.STAYPUT;
 		
 		for (Direction d : dirs) {
-			if(d.equals(Direction.STAYPUT)){
-				System.out.println("Evaluating stayput");
-			}
+			
+			System.out.println("Checking for direction: " + d);
+			
 			Point2D newLoc = new Point2D.Double(loc.getX() + d.dx, loc.getY() + d.dy);
 			double danger = weightedDanger(nextSighting, newLoc);
+			
+			System.out.println("danger: " + danger);
 			
 			if (danger < minDanger) {
 				minDanger = danger;
@@ -85,26 +99,31 @@ public class RiskAvoidance implements StrategyPrototype {
 		
 		if (minDanger == Double.MAX_VALUE) { minDanger = 0; }
 		
+		System.out.println("mindanger: " + minDanger);
+		
 		//TODO this is really primitive, not taking into consideration of board params, etc.
 		confidence = Math.min(minDanger / avgRisk, 1.0);
-		//confidence = 0.5 * Math.min(sighting.size() / 10, 1) + 0.5 * Math.min(minDanger / 200, 1);
 		
-		Point2D boatLoc = new Point(0,0);
-		if(loc.distance(boatLoc) < Parameter.RET_TO_BOAT_THRESHOLD &&
-				minDanger > Parameter.CONSERVATIVE_RISK_COEFF){
-			//return to boat
-			if(loc.equals(boatLoc))return Direction.STAYPUT;
-					
-			double thetaRad = Math.atan2(loc.getY()-boatLoc.getY(), boatLoc.getX()-loc.getX());
-			double thetaDeg = thetaRad * 180 / Math.PI;
-			if(thetaDeg < 0 ) thetaDeg += 360;
-			int dirChoice = ((int)thetaDeg)/45 + ( ((int) thetaDeg)%45 < 23 ? 0 : 1);
-			curDir = Parameter.ALL_DIRS[dirChoice];
-			
+		System.out.println("mindanger normalized: " + confidence);
+		System.out.println("static ratio: " + staticToMovingRatio);
+		
+		if (staticToMovingRatio < Parameter.DANGER_MOSTLY_CONSIDERED_AS_STATIC) {
+		
+			Point2D boatLoc = new Point(0,0);
+			if(loc.distance(boatLoc) < Parameter.RET_TO_BOAT_THRESHOLD &&
+					confidence > Parameter.CONSERVATIVE_RISK_COEFF){
+				//return to boat
+				if(loc.equals(boatLoc))return Direction.STAYPUT;
+						
+				double thetaRad = Math.atan2(loc.getY()-boatLoc.getY(), boatLoc.getX()-loc.getX());
+				double thetaDeg = thetaRad * 180 / Math.PI;
+				if(thetaDeg < 0 ) thetaDeg += 360;
+				int dirChoice = ((int)thetaDeg)/45 + ( ((int) thetaDeg)%45 < 23 ? 0 : 1);
+				curDir = Parameter.ALL_DIRS[dirChoice];
+			}
+		
 		}
 		
-		//Adjust by risk profile
-		//confidence *= Math.sqrt(risk.getRiskAvoidance());
 		System.out.println("Recommended direction: "+curDir);
 		return curDir;
 	}
@@ -145,6 +164,7 @@ public class RiskAvoidance implements StrategyPrototype {
 				} else {
 					temp*=goodFactor;
 				}
+				
 				danger+=Math.abs(temp);
 			}
 			
