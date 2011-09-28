@@ -1,5 +1,6 @@
 package isnork.g9.comm;
 
+import isnork.g9.utils.GameParams;
 import isnork.sim.GameObject;
 import isnork.sim.GameObject.Direction;
 import isnork.sim.Observation;
@@ -47,7 +48,31 @@ public class MessageProcessor {
 		if(thetaDeg < 0 ) thetaDeg += 360;
 		int dirChoice = ((int)thetaDeg)/45 + ( ((int) thetaDeg)%45 < 23 ? 0 : 1);
 		
-		return new Suggestion(choices[dirChoice],currentDest.getEstimatedValue());
+		System.out.println("raw value: " + currentDest.getEstimatedValue());
+		System.out.println("normalizer: " + GameParams.getAverageHappiness());
+		
+		double confidence = normalize(currentDest.getEstimatedValue());
+		
+		if (choices[dirChoice].equals(Direction.STAYPUT)) {
+			confidence = 0;
+		}
+		
+		return new Suggestion(choices[dirChoice], confidence);
+	}
+	
+	private double normalize(double val) {
+		double before = val / GameParams.getAverageHappiness();
+		
+		double density = GameParams.getNumberOfHappy() / 4.0 / GameParams.getGridSize() / GameParams.getGridSize();
+		
+		double invertedDensity = 1.0 - density;
+		if (invertedDensity < 0.01) invertedDensity = 0.01;
+		
+		invertedDensity *= 200;
+		
+		double temp = Math.max(Math.log(invertedDensity), 1.0);
+		
+		return Math.min(1.0, before * temp);
 	}
 	
 	public void load(Point2D myPosition, Set<Observation> whatYouSee, Set<iSnorkMessage> incomingMessages,
@@ -57,10 +82,11 @@ public class MessageProcessor {
 		
 		Set<MultiCharMessage> parsedMsgs = aggregator.processMessage(incomingMessages);
 		
-		
 		for(MultiCharMessage msg : parsedMsgs){
+			msg.setEstimatedLocation();
 			double val = MultiCharMessageEvaluator.evaluate(myPosition, memory, msg);
 			msg.setEstimatedValue(val);
+			
 			if(val > 0){
 				msgHeap.add(msg);
 			}
@@ -70,7 +96,6 @@ public class MessageProcessor {
 	}
 	
 	private void tick(){
-		
 		List<MultiCharMessage> deadMessages = new ArrayList<MultiCharMessage>();
 		
 		for(MultiCharMessage msg : msgHeap){

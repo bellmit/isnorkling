@@ -43,7 +43,9 @@ public class DirectionUtil {
 		double thetaRad = Math.atan2(myPos.getY()-target.getY(), target.getX()-myPos.getX());
 		double thetaDeg = thetaRad * 180 / Math.PI;
 		if(thetaDeg < 0 ) thetaDeg += 360;
-		return ((int)thetaDeg)/45 + ( ((int) thetaDeg)%45 < 23 ? 0 : 1);
+		int o = ((int)thetaDeg)/45 + ( ((int) thetaDeg)%45 < 23 ? 0 : 1);
+		if (o==8) o = 0;
+		return o;
 	}
 
 	public static Direction getDirectionFromIndex(int index) {

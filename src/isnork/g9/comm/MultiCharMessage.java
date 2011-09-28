@@ -1,5 +1,7 @@
 package isnork.g9.comm;
 
+import isnork.g9.utils.GameParams;
+import isnork.g9.utils.Parameter;
 import isnork.sim.GameObject.Direction;
 
 import java.awt.geom.Point2D;
@@ -12,7 +14,7 @@ public class MultiCharMessage implements Comparable<MultiCharMessage>, Comparato
 	public Direction dir;
 	public String species;
 	public int id;
-	
+	public Point2D estimatedLocation;
 	private double estimatedValue;
 	
 	public List<Point2D> diverLocations;
@@ -29,9 +31,57 @@ public class MultiCharMessage implements Comparable<MultiCharMessage>, Comparato
 		estimatedValue = e;
 	}
 	
+	private boolean isStatic() {
+		return (GameParams.getSeaLife(species).getSpeed()==0);
+	}
+	
+	private double getDx() {
+		double adjustedTargetDistance = GameParams.getVisibilityRadius() * distance / 4.0 ;
+		
+		Direction tempDir = Parameter.ALL_DIRS[octant];
+		
+		double growthFactor = adjustedTargetDistance / Math.sqrt(Math.pow(tempDir.dx, 2.0) + Math.pow(tempDir.dy, 2.0));
+		
+		return tempDir.dx * growthFactor;
+	}
+	
+	private double getDy() {
+		double adjustedTargetDistance = GameParams.getVisibilityRadius() * distance / 4.0 ;
+
+		Direction tempDir = Parameter.ALL_DIRS[octant];
+		
+		double growthFactor = adjustedTargetDistance / Math.sqrt(Math.pow(tempDir.dx, 2.0) + Math.pow(tempDir.dy, 2.0));
+		
+		return tempDir.dy * growthFactor;
+	}
+	
+	public void setEstimatedLocation() {
+		Point2D senderLoc = diverLocations.get(0);
+		
+		double dy = getDy();
+		double dx = getDx();
+		
+		Point2D initial = new Point2D.Double(senderLoc.getX() + dx, senderLoc.getY() + dy);
+		
+		if (this.isStatic()) {
+			estimatedLocation = initial;
+			return;
+		}
+		
+		//Predict the movement of creature during 3 turns it took to send the message
+		for (int i = 0; i < 3; i++) {
+			initial.setLocation(initial.getX() + dir.dx, initial.getY() + dir.dy);
+		}
+		
+		estimatedLocation = initial;
+	}
+	
 	public void age() {
 		//TODO could be smarter
-		estimatedValue *= 0.9;
+		if (!this.isStatic()) {
+			estimatedValue *= Parameter.COMMUNICATION_MESSAGE_VALUE_DECAY_FACTORY;
+			estimatedLocation.setLocation(estimatedLocation.getX() + dir.dx, estimatedLocation.getY() + dir.dy);
+		}
 	}
 	
 	public boolean die() {
@@ -51,6 +101,6 @@ public class MultiCharMessage implements Comparable<MultiCharMessage>, Comparato
 	}
 	
 	public String toString() {
-		return "octant:"+octant+",distance:"+distance+",dir:"+dir+",species:"+species+"id:"+id;
+		return "octant:"+octant+",distance:"+distance+",dir:"+dir+",species:"+species+",id:"+id;
 	}
 }

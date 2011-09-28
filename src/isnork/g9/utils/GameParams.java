@@ -51,11 +51,6 @@ public class GameParams {
 			staticHVT = maxs < 0 ? 0 : maxs;
 			dynamicHVT = maxd < 0 ? 0 : maxd;
 			overallHVT = staticHVT > dynamicHVT ? staticHVT : dynamicHVT;
-			System.out.println("Initialized Game Params");
-			System.out.println("StaticHVT: "+staticHVT);
-			System.out.println("DynamicHVT: "+dynamicHVT);
-			System.out.println("OverallHVT: "+overallHVT);
-	
 		}
 
 		public Set<SeaLifePrototype> getSeaLifePossibilites() {
@@ -90,6 +85,31 @@ public class GameParams {
 			return dynamicHVT;
 		}
 		
+		public int getNumberOfHappy() {
+			int total = 0;
+			for (SeaLifePrototype slp : seaLifePossibilites) {
+				if (slp.isDangerous()) continue;
+				int count = (((slp.getMaxCount() + slp.getMinCount()) % 2 == 0) ? (slp.getMaxCount() + slp.getMinCount())/2 : (slp.getMaxCount() + slp.getMinCount())/2 + 1 );
+				total+=count;
+			}
+			
+			return total;
+		}
+		
+		public double getAverageHappiness() {
+			int total = 0;
+			double totalHappiness = 0.0;
+			for (SeaLifePrototype slp : seaLifePossibilites) {
+				if (slp.isDangerous()) continue;
+				int count = (((slp.getMaxCount() + slp.getMinCount()) % 2 == 0) ? (slp.getMaxCount() + slp.getMinCount())/2 : (slp.getMaxCount() + slp.getMinCount())/2 + 1 );
+				total+=count;
+				totalHappiness += count * slp.getHappiness();
+			}
+			
+			if (total==0) return 0.0;
+			
+			return totalHappiness / total;
+		}
 		
 	}
 	
@@ -133,6 +153,12 @@ public class GameParams {
 		return _instance.getDynamicHVT();
 	}
 	
+	public static double getAverageHappiness() {
+		return _instance.getAverageHappiness();
+	}
 	
+	public static int getNumberOfHappy() {
+		return _instance.getNumberOfHappy();
+	}
 
 }

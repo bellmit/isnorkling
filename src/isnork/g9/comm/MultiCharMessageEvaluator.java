@@ -13,17 +13,7 @@ public class MultiCharMessageEvaluator {
 		
 		System.out.println(msg);
 		
-		Point2D senderLoc = msg.diverLocations.get(0);
-		
-		double adjustedTargetDistance = GameParams.getVisibilityRadius() * msg.distance / 4.0 ;
-		
-		double growthFactor = adjustedTargetDistance / Math.sqrt(Math.pow(msg.dir.dx, 2.0) + Math.pow(msg.dir.dy, 2.0));
-		
-		double dx = msg.dir.dx * growthFactor;
-		double dy = msg.dir.dy * growthFactor;
-		
-		
-		Point2D targetLoc = new Point2D.Double(senderLoc.getX() + dx, senderLoc.getY() + dy);
+		Point2D targetLoc = msg.estimatedLocation;
 		
 		double distance = targetLoc.distance(myPosition);
 		
