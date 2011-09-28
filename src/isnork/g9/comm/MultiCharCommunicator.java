@@ -22,25 +22,36 @@ public class MultiCharCommunicator implements CommPrototype {
 		
 		processIncoming(myPosition, whatYouSee,  incomingMessages, playerLocations);
 		
+		System.out.println("Current buffer: " + buffer);
+		
 		if (buffer.length() == 0) {
 			Observation temp = recentSightings.getNewHVT(whatYouSee);
-			if (temp != null) {
+			if (temp != null && !temp.getName().equals("Diver by G9")) {
 				buffer = MultiCharEncoding.encode(temp, myPosition);
+				System.out.println("Want to send: " + buffer + ", will be buffered");
 			}
-		}
-
-		if (buffer.length() != 0) {
+			
+			System.out.println("Returned null, didn't see anything interesting");
+			return null;
+			
+		} else {
 			String toReturn = Character.toString(buffer.charAt(0));
 			buffer = buffer.substring(1);
+			System.out.println("Sent: " + toReturn);
 			return toReturn;
-		} else {
-			return null;
 		}
 	}
 
 	private void processIncoming(Point2D myPosition,
 			Set<Observation> whatYouSee, Set<iSnorkMessage> incomingMessages,
 			Set<Observation> playerLocations) {
+		
+		//TODO remove later
+		System.out.print("Received: ");
+		for (iSnorkMessage m : incomingMessages)
+			System.out.print(m.getSender() + ":" + m.getMsg() + ", ");
+		System.out.println();
+		
 		memory.processObservations(myPosition, whatYouSee);
 		queuedMessages.load(myPosition, whatYouSee,  incomingMessages, playerLocations, memory);
 		

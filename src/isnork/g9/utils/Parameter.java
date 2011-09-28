@@ -19,8 +19,8 @@ public class Parameter {
 			counter++;
 		}
 		
-		//Failed;
-		return -1;
+		//Stationary;
+		return 0;
 	}
 	
 	public static final double GLOBAL_CIRCLE_STRATEGY_CONFIDENCE = 1;

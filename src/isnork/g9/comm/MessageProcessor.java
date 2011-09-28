@@ -28,7 +28,6 @@ public class MessageProcessor {
 	public Suggestion getHVTDirection(Point2D myPosition){
 		
 		if(msgHeap.isEmpty()){
-			System.out.println("Heap is empty");
 			return new Suggestion(GameObject.Direction.STAYPUT, 0.5);
 		}
 		

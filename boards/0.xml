@@ -20,7 +20,7 @@
    <string>Gorgon</string> 
   </void> 
   <void property="speed"> 
-   <int>1</int> 
+   <int>0</int> 
   </void> 
  </object> 
 </java> 
