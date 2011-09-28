@@ -1,1 +1,12 @@
-Hello World
+Author: Yufei, Neil, Chris, and Sandeep
+Date:   September 28, 2011
+
+This is an implementation for a solution to the iSnork simulation game 
+for the class COMS4444 Programming and Problem Solving.
+
+It implements four sub-strategies: exploration, communication, 
+danger avoidance, and returning. An overall utility function controls
+the weight on each of these four sub-strategies as game progresses.
+
+This is a general solution that we feel works well on most types
+of boards.
